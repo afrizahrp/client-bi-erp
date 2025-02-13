@@ -1,5 +1,6 @@
 import { SiteLogo } from "@/components/svg";
 import { useSidebar } from "@/store";
+import Image from "next/image";
 import React from "react";
 
 const SidebarLogo = ({ hovered }: { hovered?: boolean }) => {
@@ -8,10 +9,12 @@ const SidebarLogo = ({ hovered }: { hovered?: boolean }) => {
     <div className="px-4 py-4 ">
       <div className=" flex items-center">
         <div className="flex flex-1 items-center gap-x-3  ">
-          <SiteLogo className="text-primary h-8 w-8" />
+          {/* <SiteLogo className="text-primary h-8 w-8" /> */}
+                <Image src='/images/logo/loader-logo.svg' alt='layoutLoaderLogo' width={80} height={80} priority />
+          
           {(!collapsed || hovered) && (
-            <div className="flex-1  text-xl text-primary  font-semibold">
-              DashTail
+            <div className="flex-1  text-md text-primary  font-semibold">
+              Bi-NewApps
             </div>
           )}
         </div>

@@ -24,10 +24,10 @@ export const Header = () => {
   return (
     <div className='w-full flex flex-col gap-y-1 items-center justify-center mb-0 mt-0'>
       <Image
-        src='/images/logo/logo.png'
+        src='/images/logo/login-logo.svg'
         alt='logoAtlogin'
-        width={150}
-        height={150}
+        width={120}
+        height={120}
         style={{ top: 0, textAlign: 'left' }}
         priority
       />

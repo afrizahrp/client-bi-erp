@@ -13,15 +13,15 @@ import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
-import { cn } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
-import { SiteLogo } from "@/components/svg";
 import { Icon } from "@iconify/react";
-import { Checkbox } from "@/components/ui/checkbox";
 import { CardWrapper } from "@/components/auth/card-wrapper";
 
 import { LoginSchema } from '@/utils/schema/login.schema'
+// import { Checkbox } from "@/components/ui/checkbox";
+// import { SiteLogo } from "@/components/svg";
+// import { cn } from "@/lib/utils";
 
 
 

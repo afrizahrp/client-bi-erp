@@ -16,7 +16,7 @@ export const CardWrapper = ({
   children,
   backButtonLabel,
   backButtonHref,
-  showSocial
+  // showSocial
 }: CardWrapperProps) => {
   return (
     <Card className='w-[400px] shadow-md'>
