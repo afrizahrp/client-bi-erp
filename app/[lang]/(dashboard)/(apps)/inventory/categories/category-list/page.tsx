@@ -1,11 +1,21 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { CategoryListTable } from './category-list-table';
-import { CategoryColumns } from './category-list-table/components/columns';
+import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
+import { CategoryListTable } from './category-list-table';
 import PageHeader from '@/components/page-header';
 import { routes } from '@/config/routes';
+import useCategories from '@/queryHooks/useCategories';
+
+interface CategoryColumns {
+  id: string;
+  name: string;
+  type: string;
+  categoryType: string;
+  iStatus: number;
+  status: string;
+  remarks: string;
+  // images: string[];
+}
 
 const pageHeader = {
   title: 'Category List',
@@ -21,41 +31,16 @@ const pageHeader = {
 };
 
 const CategoryListPage = () => {
-  const [categories, setCategories] = useState<CategoryColumns[]>([]);
+  // const { data: categories, isLoading, error } = useCategories();
+  const { data: categories = [], isLoading, error } = useCategories();
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/categories`,
-          {
-            params: {
-              company_id: 'BIS',
-            },
-          }
-        );
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-        const formattedCategories: CategoryColumns[] = response.data.map(
-          (item: any) => ({
-            type: item.type,
-            categoryType: item.categoryType.name,
-            id: item.id,
-            name: item.name,
-            iStatus: item.iStatus,
-            status: item.status?.name,
-            // remarks: item?.remarks,
-            // images: item.images.map((image: any) => image.imageURL),
-          })
-        );
-
-        setCategories(formattedCategories);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
-    };
-
-    fetchCategories();
-  }, []);
+  if (error) {
+    return <div>Error fetching categories: {error.message}</div>;
+  }
 
   return (
     <>
@@ -64,7 +49,7 @@ const CategoryListPage = () => {
       <div>
         <Card className='mt-6'>
           <CardContent className='p-10'>
-            <CategoryListTable data={categories} />
+            <CategoryListTable data={categories as CategoryColumns[]} />
           </CardContent>
         </Card>
       </div>

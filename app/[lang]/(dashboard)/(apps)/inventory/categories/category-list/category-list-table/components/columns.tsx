@@ -9,7 +9,7 @@ export type CategoryColumns = {
   categoryType: string | null;
   id: string;
   name: string | null;
-  iStatus: boolean;
+  iStatus: number;
   status: string | null;
   remarks: string | null;
   // images: string[];

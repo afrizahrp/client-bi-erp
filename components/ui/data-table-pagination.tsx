@@ -62,7 +62,9 @@ export function DataTablePagination<TData>({
     <div className='flex items-center flex-wrap gap-2 justify-between p-5'>
       <div className='flex-1 text-sm text-muted-foreground whitespace-nowrap'>
         {table.getFilteredSelectedRowModel().rows.length > 0
-          ? `${table.getFilteredSelectedRowModel().rows.length} of ${table.getFilteredRowModel().rows.length} data selected.`
+          ? `${table.getFilteredSelectedRowModel().rows.length} of ${
+              table.getFilteredRowModel().rows.length
+            } data selected.`
           : `Total ${table.getFilteredRowModel().rows.length} data`}
       </div>
       <div className='flex items-center space-x-6 lg:space-x-8'>
