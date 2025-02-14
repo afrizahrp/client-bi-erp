@@ -25,7 +25,7 @@ export function DataTablePagination<TData>({
   });
 
   useEffect(() => {
-    // console.log('Setting current page in local storage:', currentPage);
+    // Sync current page with local storage and URL
     localStorage.setItem('currentPage', currentPage.toString());
     const url = new URL(window.location.href);
     url.searchParams.set('page', currentPage.toString());
@@ -33,9 +33,9 @@ export function DataTablePagination<TData>({
   }, [currentPage]);
 
   useEffect(() => {
+    // Sync URL page with current page state
     const url = new URL(window.location.href);
     const page = url.searchParams.get('page');
-    console.log('URL page:', page);
     if (page) {
       const pageIndex = parseInt(page, 10);
       if (pageIndex !== table.getState().pagination.pageIndex + 1) {
@@ -47,7 +47,7 @@ export function DataTablePagination<TData>({
   }, [table.getState().pagination.pageIndex]);
 
   useEffect(() => {
-    console.log('Syncing current page with table state:', currentPage);
+    // Sync current page state with table state
     if (currentPage !== table.getState().pagination.pageIndex + 1) {
       table.setPageIndex(currentPage - 1);
     }

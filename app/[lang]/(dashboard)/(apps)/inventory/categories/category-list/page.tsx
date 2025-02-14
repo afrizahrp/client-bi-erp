@@ -32,7 +32,8 @@ const pageHeader = {
 
 const CategoryListPage = () => {
   // const { data: categories, isLoading, error } = useCategories();
-  const { data: categories = [], isLoading, error } = useCategories();
+  const company_id = 'BIS'; // Ganti dengan nilai yang sesuai
+  const { data: categories = [], isLoading, error } = useCategories(company_id);
 
   if (isLoading) {
     return <div>Loading...</div>;
