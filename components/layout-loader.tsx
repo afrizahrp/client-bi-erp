@@ -9,9 +9,9 @@ const LayoutLoader = () => {
       {/* <SiteLogo className=" h-10 w-10 text-primary" /> */}
       <Image src='/images/logo/loader-logo.png' alt='layoutLoaderLogo' width={100} height={100} priority />
 
-      <span className=" inline-flex gap-1">
-        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        Loading...
+      <span className=" inline-flex gap-1 text-blue-800">
+        <Loader2 className="mr-2 h-4 w-4 animate-spin text-blue-800" />
+        Please wait while loading...
       </span>
     </div>
   );

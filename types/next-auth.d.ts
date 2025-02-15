@@ -5,6 +5,7 @@ export type ExtendedUser = DefaultSession['user'] & {
   image: string;
   isTwoFactorEnabled: boolean;
   isOAuth: boolean;
+  role_id: string;
   company_id: string;
   branch_id: string;
 };

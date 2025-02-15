@@ -57,11 +57,14 @@ export const ResetSchema = z.object({
 });
 
 export const LoginSchema = z.object({
-  name: z.string().min(1, {
+  name: z.string().min(3, {
     message: 'Name is required',
   }),
   password: z.string().min(1, {
     message: 'Password is required',
+  }),
+  company_id: z.string().min(3, {
+    message: 'Company is required',
   }),
   code: z.optional(z.string()),
 });

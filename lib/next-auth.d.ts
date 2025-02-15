@@ -9,6 +9,7 @@ declare module "next-auth" {
       name: string;
       roleId: string;
       image: string;
+      company_id: string;
     };
 
     backendTokens: {
@@ -28,6 +29,8 @@ declare module "next-auth/jwt" {
       name: string;
       roleId: string;
       image: string;
+      company_id: string;
+
     };
 
     backendTokens: {

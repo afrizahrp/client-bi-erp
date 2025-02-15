@@ -22,7 +22,7 @@ const MultiMenuHandler = ({
     <div
       onClick={() => toggleMultiMenu(subIndex)}
       className={cn(
-        "text-sm flex gap-3  rounded items-center transition-all duration-150 cursor-pointer  relative before:absolute  before: top-0 before:-left-5 before:w-[3px] before:h-0 before:transition-all before:duration-200",
+        "text-xs flex gap-3  rounded items-center transition-all duration-150 cursor-pointer  relative before:absolute  before: top-0 before:-left-5 before:w-[3px] before:h-0 before:transition-all before:duration-200",
         className,
         {
           " text-primary  before:bg-primary   before:h-full ":

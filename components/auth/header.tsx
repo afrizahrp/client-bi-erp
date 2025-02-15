@@ -18,8 +18,8 @@ export const Header: React.FC<HeaderProps> = ({ label }) => {
       <Image
         src='/images/logo/logo.png'
         alt='logoAtlogin'
-        width={140}
-        height={140}
+        width={120}
+        height={120}
         style={{ top: 0, textAlign: 'left' }}
         priority
       />

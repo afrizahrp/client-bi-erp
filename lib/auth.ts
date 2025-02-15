@@ -41,15 +41,19 @@ export const authOptions: NextAuthOptions = {
           placeholder: "jsmith",
         },
         password: { label: "Password", type: "password" },
+        company_id: { label: "Company ID", type: "text" },
       },
       async authorize(credentials, req) {
-        if (!credentials?.name || !credentials?.password) return null;
-        const { name, password } = credentials;
+        console.log("Credentials:", credentials); // Tambahkan ini
+
+        if (!credentials?.name || !credentials?.password || !credentials?.company_id) return null;
+        const { name, password ,company_id} = credentials;
         const res = await fetch(Backend_URL + "/auth/login", {
           method: "POST",
           body: JSON.stringify({
             name,
             password,
+            company_id
           }),
           headers: {
             "Content-Type": "application/json",

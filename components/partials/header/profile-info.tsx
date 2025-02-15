@@ -49,15 +49,19 @@ const ProfileInfo = () => {
             <div className="text-sm font-medium text-default-800 capitalize ">
               {session?.user?.name ?? "User"}
             </div>
+           
             <Link
               href="/dashboard"
               className="text-xs text-default-600 hover:text-primary"
             >
               {session?.user.email }
             </Link>
+             <div className="text-xs font-medium text-default-500 capitalize ">
+              Signed in as  {session?.user?.roleId ?? "Role"}
+            </div>
           </div>
         </DropdownMenuLabel>
-        <DropdownMenuGroup>
+        {/* <DropdownMenuGroup>
           {[
             {
               name: "profile",
@@ -91,8 +95,8 @@ const ProfileInfo = () => {
               </DropdownMenuItem>
             </Link>
           ))}
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
+        </DropdownMenuGroup> */}
+        {/* <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <Link href="/dashboard" className="cursor-pointer">
             <DropdownMenuItem className="flex items-center gap-2 text-sm font-medium text-default-600 capitalize px-3 py-1.5 dark:hover:bg-background cursor-pointer">
@@ -165,14 +169,14 @@ const ProfileInfo = () => {
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
-        </DropdownMenuGroup>
+        </DropdownMenuGroup> */}
         <DropdownMenuSeparator className="mb-0 dark:bg-background" />
         <DropdownMenuItem
           onSelect={() => signOut()}
           className="flex items-center gap-2 text-sm font-medium text-default-600 capitalize my-1 px-3 dark:hover:bg-background cursor-pointer"
         >
           <Icon icon="heroicons:power" className="w-4 h-4" />
-          Log out
+          Sign Out
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

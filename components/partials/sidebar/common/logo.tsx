@@ -1,17 +1,31 @@
-import { SiteLogo } from "@/components/svg";
 import { useSidebar } from "@/store";
 import Image from "next/image";
 import React from "react";
 import { Pin } from 'lucide-react';
+import { useSession, getSession } from "next-auth/react";
 
 
-const SidebarLogo = ({ hovered }: { hovered?: boolean }) => {
+const SidebarLogo = ({  hovered }: {  hovered?: boolean }) => {
   const { sidebarType, setCollapsed, collapsed } = useSidebar();
+  const { data: session } = useSession();
+  const companyId = session?.user?.company_id.trim();
+
+  // Pemetaan companyId ke nama perusahaan
+  let companyName = "";
+  if (companyId === "bis") {
+    companyName = "Bumi Indah Saranamedis";
+  } else if (companyId === "bip") {
+    companyName = "Bumi Indah Putra";
+  } else if (companyId === "kbip") {
+    companyName = "Karoseri Bumi Indah Putra";
+  }
+
+  console.log("Company ID:", companyId); // Tambahkan console.log di sini untuk memeriksa nilai company_id
+
   return (
     <div className="px-4 py-4 ">
       <div className="flex items-center justify-center flex-col relative">
-      <div className="flex justify-center items-center">
-          {/* <SiteLogo className="text-primary h-8 w-8" /> */}
+        <div className="flex justify-center items-center">
           <Image src='/images/logo/logo.png' alt='sidebar-logo' width={100} height={100} priority />
         </div>
         {sidebarType === "classic" && (!collapsed || hovered) && (
@@ -25,15 +39,14 @@ const SidebarLogo = ({ hovered }: { hovered?: boolean }) => {
                 }
           `}
             >
-                            <Pin className="h-4 w-4 border-none" />
-
+              <Pin className="h-4 w-4 border-none" />
             </div>
           </div>
         )}
       </div>
       {(!collapsed || hovered) && (
-          <div className="text-md text-primary font-semibold mt-1 text-center">
-          Bumi Indah Saranamedis
+        <div className="text-md text-primary font-semibold mt-1 text-center">
+          {companyName}
         </div>
       )}
     </div>
@@ -41,4 +54,3 @@ const SidebarLogo = ({ hovered }: { hovered?: boolean }) => {
 };
 
 export default SidebarLogo;
-

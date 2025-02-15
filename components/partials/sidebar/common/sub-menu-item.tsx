@@ -42,7 +42,7 @@ const SubMenuItem = ({ subItem, trans }: {
     <LockLink href={subItem.href} subItem={subItem} trans={trans}>
       <div
         className={cn(
-          "text-sm capitalize  font-normal flex gap-3 items-center transition-all duration-150 rounded dark:hover:text-primary  ",
+          "text-xs capitalize  font-normal flex gap-3 items-center transition-all duration-150 rounded dark:hover:text-primary  ",
           {
             " text-primary   ": isLocationMatch(subItem.href, locationName),
             "  text-default-600 dark:text-default-700  ": !isLocationMatch(

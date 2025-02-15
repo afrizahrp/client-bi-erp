@@ -31,14 +31,12 @@ const pageHeader = {
   ],
 };
 
-const CategoryListPage = () => {
-  // const { data: categories, isLoading, error } = useCategories();
-  const company_id = 'BIS'; // Ganti dengan nilai yang sesuai
+const CategoryListPage = ({ session }: { session: any }) => {
+  const company_id = session?.user?.company_id; // Ambil company_id dari sesi
   const { data: categories = [], isLoading, error } = useCategories(company_id);
 
   if (isLoading) {
-
-      <LayoutLoader />
+    return <LayoutLoader />;
   }
 
   if (error) {
