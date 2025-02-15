@@ -1,39 +1,31 @@
-// import { Poppins } from 'next/font/google'
+import { Poppins } from 'next/font/google'
+import { cn } from '@/lib/utils'
 
-// import { useEffect } from 'react'
+const font = Poppins({
+  subsets: ['latin'],
+  weight: ['600']
+})
 
-// import { cn } from '@/lib/utils'
-
-// const font = Poppins({
-//   subsets: ['latin'],
-//   weight: ['600']
-// })
-
-// interface HeaderProps {
-//   label: string;
-// }
-
-// useEffect(() => {
-//   const selectedTheme = localStorage.getItem('theme')
-//   console.log(selectedTheme)
-// }, [])
+interface HeaderProps {
+  label: string;
+}
 
 import Image from 'next/image'
 
-export const Header = () => {
+export const Header: React.FC<HeaderProps> = ({ label }) => {
   return (
-    <div className='w-full flex flex-col gap-y-1 items-center justify-center mb-0 mt-0'>
+    <div className='w-full flex flex-col items-center justify-center mb-0 mt-0'>
       <Image
-        src='/images/logo/login-logo.svg'
+        src='/images/logo/logo.png'
         alt='logoAtlogin'
-        width={120}
-        height={120}
+        width={140}
+        height={140}
         style={{ top: 0, textAlign: 'left' }}
         priority
       />
- {/* <h1 className={cn('text-md font-semibold text-blue-800 drop-shadow-md', font.className)}>
+      <h1 className={cn('text-md font-semibold text-blue-700 drop-shadow-md -mt-4', font.className)}>
         {label}
-      </h1>     */}
-      </div>
+      </h1>    
+    </div>
   )
 }

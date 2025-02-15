@@ -21,7 +21,7 @@ export const CardWrapper = ({
   return (
     <Card className='w-[400px] shadow-md'>
       <CardHeader>
-        <Header /> 
+        <Header  label='Bumi Indah Saranamedis' />
       </CardHeader>
       <CardContent>{children}</CardContent>
       {/* {showSocial && (

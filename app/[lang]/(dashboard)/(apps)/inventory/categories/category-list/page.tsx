@@ -5,6 +5,7 @@ import { CategoryListTable } from './category-list-table';
 import PageHeader from '@/components/page-header';
 import { routes } from '@/config/routes';
 import useCategories from '@/queryHooks/useCategories';
+import LayoutLoader from '@/components/layout-loader';
 
 interface CategoryColumns {
   id: string;
@@ -36,7 +37,8 @@ const CategoryListPage = () => {
   const { data: categories = [], isLoading, error } = useCategories(company_id);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+
+      <LayoutLoader />
   }
 
   if (error) {

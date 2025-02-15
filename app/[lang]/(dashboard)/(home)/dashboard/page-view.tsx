@@ -1,4 +1,3 @@
-'use client';
 
 // import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 // import ReportsSnapshot from './components/reports-snapshot';
@@ -21,44 +20,11 @@ interface DashboardPageViewProps {
   };
 }
 const DashboardPageView = ({ trans }: DashboardPageViewProps) => {
-  const [categories, setCategories] = useState([]);
-  <div>This pages is for dashboard</div>;
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/categories`,
-          {
-            params: {
-              company_id: 'BIS',
-              page: 1,
-              limit: 10,
-            },
-          }
-        );
-        setCategories(response.data);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
-    };
-
-    fetchCategories();
-  }, []);
-
+ 
   return (
-    <div>
       <div>This page is for dashboard</div>
-      <div>
-        <h2>Categories</h2>
-        <ul>
-          {categories.map((category: any) => (
-            <li key={category.id}>{category.name}</li>
-          ))}
-        </ul>
-      </div>
-      {/* ...existing code... */}
-    </div>
+      
   );
 };
 
