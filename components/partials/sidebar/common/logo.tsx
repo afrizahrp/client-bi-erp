@@ -12,12 +12,19 @@ const SidebarLogo = ({  hovered }: {  hovered?: boolean }) => {
 
   // Pemetaan companyId ke nama perusahaan
   let companyName = "";
+  let logoSrc = '/images/logo/logo.png'; // Default logo
+
+  
   if (companyId === "bis") {
     companyName = "Bumi Indah Saranamedis";
   } else if (companyId === "bip") {
     companyName = "Bumi Indah Putra";
+    logoSrc = '/images/logo/bipmed-logo.png'; // Logo untuk BIP
+
   } else if (companyId === "kbip") {
     companyName = "Karoseri Bumi Indah Putra";
+    logoSrc = '/images/logo/bipmed-logo.png'; // Logo untuk KBIP
+
   }
 
   console.log("Company ID:", companyId); // Tambahkan console.log di sini untuk memeriksa nilai company_id
@@ -26,7 +33,7 @@ const SidebarLogo = ({  hovered }: {  hovered?: boolean }) => {
     <div className="px-4 py-4 ">
       <div className="flex items-center justify-center flex-col relative">
         <div className="flex justify-center items-center">
-          <Image src='/images/logo/logo.png' alt='sidebar-logo' width={100} height={100} priority />
+          <Image src={logoSrc} alt='sidebar-logo' width={100} height={100} priority />
         </div>
         {sidebarType === "classic" && (!collapsed || hovered) && (
           <div className="flex-none">

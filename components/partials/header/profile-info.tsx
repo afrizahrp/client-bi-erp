@@ -57,7 +57,7 @@ const ProfileInfo = () => {
               {session?.user.email }
             </Link>
              <div className="text-xs font-medium text-default-500 capitalize ">
-              Signed in as  {session?.user?.roleId ?? "Role"}
+              Signed in as  {session?.user?.role_id ?? "Role"}
             </div>
           </div>
         </DropdownMenuLabel>
