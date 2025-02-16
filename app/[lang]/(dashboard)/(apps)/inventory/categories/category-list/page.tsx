@@ -80,16 +80,16 @@ const CategoryListPage = () => {
               data={categories}
               currentPage={page}
               totalPages={totalPages}
-              totalRecords={total ?? 0}
+              totalRecords={total}
               onPageChange={setPage}
               limit={limit}
               setLimit={setLimit}
             />
-            {/* <div className='flex justify-between items-center mt-4'>
-              <div className='text-xs'>Total Records: {total}</div>
-            </div> */}
           </CardContent>
         </Card>
+        {/* <div className='flex justify-between items-center mt-4'>
+          <div className='text-xs'>Total Records: {total}</div>
+        </div> */}
       </div>
     </>
   );

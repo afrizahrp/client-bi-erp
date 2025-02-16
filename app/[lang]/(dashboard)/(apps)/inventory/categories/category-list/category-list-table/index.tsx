@@ -7,7 +7,7 @@ interface CategoriesProps {
   data: CategoryColumns[];
   currentPage: number;
   totalPages: number;
-  totalRecords: number;
+  totalRecords: number | undefined;
   onPageChange: (page: number) => void;
   limit: number;
   setLimit: (limit: number) => void;

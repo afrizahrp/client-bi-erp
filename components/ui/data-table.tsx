@@ -54,7 +54,7 @@ interface DataTableProps<TData, TValue> {
   pageName?: string;
   currentPage: number;
   totalPages: number;
-  totalRecords: number;
+  totalRecords: number | undefined;
   onPageChange: (page: number) => void;
   limit: number;
   setLimit: (limit: number) => void;
@@ -127,7 +127,7 @@ export function DataTable<TData, TValue>({
                 <SelectValue placeholder={limit} />
               </SelectTrigger>
               <SelectContent side='top'>
-                {[5, 10].map((pageSize) => (
+                {[5, 10, 20].map((pageSize) => (
                   <SelectItem key={pageSize} value={`${pageSize}`}>
                     {pageSize}
                   </SelectItem>
@@ -231,11 +231,13 @@ export function DataTable<TData, TValue>({
 
         <div className='flex justify-between items-center mt-4'>
           <div className='text-xs'>Total data: {totalRecords}</div>
-          <DataTablePagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={onPageChange}
-          />
+          <div className='ml-auto'>
+            <DataTablePagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={onPageChange}
+            />
+          </div>
         </div>
       </div>
       <FilterSidebar
