@@ -23,11 +23,11 @@ const companies = [
     label: "Bumi Indah Saranamedis",
   },
   {
-    value: "bis",
+    value: "bip",
     label: "Bumi Indah Putra",
   },
   {
-    value: "bis",
+    value: "kbip",
     label: "Karoseri",
   },
 ];

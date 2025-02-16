@@ -10,9 +10,7 @@
 // import TopTen from './components/top-ten';
 // import TopPage from './components/top-page';
 // import DatePickerWithRange from '@/components/date-picker-with-range';
-import React, { useEffect, useState } from 'react';
-
-import axios from 'axios';
+import React  from 'react';
 
 interface DashboardPageViewProps {
   trans: {

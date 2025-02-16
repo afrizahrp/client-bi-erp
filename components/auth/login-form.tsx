@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
-import { useForm, Controller } from 'react-hook-form';
-
+import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -12,7 +11,6 @@ import Link from "next/link";
 import { Icon } from "@iconify/react";
 import { CardWrapper } from "@/components/auth/card-wrapper";
 import CompanyCombobox from "../ui/company-combobox";
-
 import { LoginSchema } from '@/utils/schema/login.schema';
 import { useMediaQuery } from "@/hooks/use-media-query";
 
