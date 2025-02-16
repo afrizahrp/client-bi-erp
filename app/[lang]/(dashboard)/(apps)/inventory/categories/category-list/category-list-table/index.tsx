@@ -5,9 +5,23 @@ import { routes } from '@/config/routes';
 
 interface CategoriesProps {
   data: CategoryColumns[];
+  currentPage: number;
+  totalPages: number;
+  totalRecords: number;
+  onPageChange: (page: number) => void;
+  limit: number;
+  setLimit: (limit: number) => void;
 }
 
-export const CategoryListTable: React.FC<CategoriesProps> = ({ data }) => {
+export const CategoryListTable: React.FC<CategoriesProps> = ({
+  data,
+  currentPage,
+  totalPages,
+  totalRecords,
+  onPageChange,
+  limit,
+  setLimit,
+}) => {
   return (
     <div>
       <DataTable
@@ -16,6 +30,12 @@ export const CategoryListTable: React.FC<CategoriesProps> = ({ data }) => {
         href={routes.inventory.newCategory}
         hrefText='New Category'
         pageName='category'
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalRecords={totalRecords}
+        onPageChange={onPageChange}
+        limit={limit}
+        setLimit={setLimit}
       />
     </div>
   );

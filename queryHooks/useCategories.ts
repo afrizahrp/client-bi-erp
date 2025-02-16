@@ -1,39 +1,40 @@
 import { useQuery } from '@tanstack/react-query';
-import { useSession } from 'next-auth/react';
-
 import { api } from '@/config/axios.config';
 
-export const useCategories = (page: number, limit: number) => {
-  const { data: session } = useSession();
+interface Category {
+  id: string;
+  name: string;
+  categoryType: string;
+  status: string;
+  remarks?: string | null;
+}
 
-  const company_id = session?.user?.company_id.toUpperCase().trim();
+interface CategoriesResponse {
+  data: Category[];
+  total: number;
+}
 
-  const { data, isLoading, error, ...rest } = useQuery<any, Error>({
+export const useCategories = (
+  company_id: string,
+  page: number,
+  limit: number
+) => {
+  const { data, isLoading, error, ...rest } = useQuery<
+    CategoriesResponse,
+    Error
+  >({
     queryKey: ['categories', company_id, page, limit],
     queryFn: () =>
       api
-        .get('/categories', {
+        .get<CategoriesResponse>('/categories', {
           params: { company_id, page, limit },
         })
-        .then((res) => ({
-          data: res.data.data.map((item: any) => ({
-            id: item.id,
-            name: item.name,
-            type: item.type,
-            categoryType: item.categoryType?.name,
-            iStatus: item.iStatus,
-            status: item.status?.name,
-            remarks: item?.remarks,
-          })),
-          total: res.data.total,
-        })),
+        .then((res) => res.data),
     staleTime: 60 * 1000, // 60s
     retry: 3,
   });
 
-  console.log('categories hooks', data);
-
-  return { data, isLoading, error, ...rest };
+  return { data: data?.data, total: data?.total, isLoading, error, ...rest };
 };
 
 export default useCategories;

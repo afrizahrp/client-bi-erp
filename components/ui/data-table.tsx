@@ -1,5 +1,4 @@
 'use client';
-
 import * as React from 'react';
 import {
   ColumnDef,
@@ -29,7 +28,7 @@ import { Filter } from 'lucide-react';
 
 import FilterSidebar from './filter-sidebar';
 
-import { DataTablePagination } from '@/components/ui/data-table-pagination';
+import DataTablePagination from '@/components/ui/data-table-pagination';
 import { DataTableViewOptions } from '@/components/ui/data-table-view-options';
 
 import { Button } from '@/components/ui/button';
@@ -53,6 +52,12 @@ interface DataTableProps<TData, TValue> {
   href: string;
   hrefText?: string;
   pageName?: string;
+  currentPage: number;
+  totalPages: number;
+  totalRecords: number;
+  onPageChange: (page: number) => void;
+  limit: number;
+  setLimit: (limit: number) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -61,6 +66,12 @@ export function DataTable<TData, TValue>({
   href,
   hrefText,
   pageName,
+  currentPage,
+  totalPages,
+  totalRecords,
+  onPageChange,
+  limit,
+  setLimit,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -107,18 +118,16 @@ export function DataTable<TData, TValue>({
           <div className='flex items-center space-x-2'>
             <p className='text-sm '>Show</p>
             <Select
-              value={`${table.getState().pagination.pageSize}`}
+              value={`${limit}`}
               onValueChange={(value) => {
-                table.setPageSize(Number(value));
+                setLimit(Number(value));
               }}
             >
               <SelectTrigger className='h-8 w-[70px]'>
-                <SelectValue
-                  placeholder={table.getState().pagination.pageSize}
-                />
+                <SelectValue placeholder={limit} />
               </SelectTrigger>
               <SelectContent side='top'>
-                {[5, 10, 20].map((pageSize) => (
+                {[5, 10].map((pageSize) => (
                   <SelectItem key={pageSize} value={`${pageSize}`}>
                     {pageSize}
                   </SelectItem>
@@ -220,7 +229,14 @@ export function DataTable<TData, TValue>({
           </Table>
         </div>
 
-        <DataTablePagination table={table} />
+        <div className='flex justify-between items-center mt-4'>
+          <div className='text-xs'>Total data: {totalRecords}</div>
+          <DataTablePagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={onPageChange}
+          />
+        </div>
       </div>
       <FilterSidebar
         table={table}

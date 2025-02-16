@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { Card, CardContent } from '@/components/ui/card';
 import { CategoryListTable } from './category-list-table';
@@ -11,9 +11,7 @@ import LayoutLoader from '@/components/layout-loader';
 interface CategoryColumns {
   id: string;
   name: string;
-  type: number;
   categoryType: string;
-  iStatus: number;
   status: string;
   remarks: string;
   // images: string[];
@@ -33,17 +31,43 @@ const pageHeader = {
 };
 
 const CategoryListPage = () => {
+  const { data: session } = useSession();
+  const company_id = 'BIS';
+  //  session?.user?.company_id?.trim().toUpperCase() || ''; // Ambil company_id dari sesi dan konversi ke huruf besar
+
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const { data, isLoading, error } = useCategories(page, limit);
+  const { data, total, isLoading, error } = useCategories(
+    company_id,
+    page,
+    limit
+  );
 
-  if (isLoading) {
+  const [categories, setCategories] = useState<CategoryColumns[]>([]);
+
+  useEffect(() => {
+    if (data) {
+      setCategories(
+        data.map((category) => ({
+          id: category.id.trim(),
+          name: category.name.trim(),
+          categoryType: category.categoryType,
+          status: category.status,
+          remarks: category.remarks?.trim() ?? '',
+        }))
+      );
+    }
+  }, [data]);
+
+  if (isLoading && categories.length === 0) {
     return <LayoutLoader />;
   }
 
   if (error) {
     return <div>Error fetching categories: {error.message}</div>;
   }
+
+  const totalPages = Math.ceil((total ?? 0) / limit);
 
   return (
     <>
@@ -52,18 +76,18 @@ const CategoryListPage = () => {
       <div>
         <Card className='mt-6'>
           <CardContent className='p-10'>
-            <CategoryListTable data={data?.data as CategoryColumns[]} />
-            <div className="pagination">
-              <button onClick={() => setPage((prev) => Math.max(prev - 1, 1))}>
-                Previous
-              </button>
-              <span>
-                Page {page} of {Math.ceil(data?.total / limit)}
-              </span>
-              <button onClick={() => setPage((prev) => prev + 1)}>
-                Next
-              </button>
-            </div>
+            <CategoryListTable
+              data={categories}
+              currentPage={page}
+              totalPages={totalPages}
+              totalRecords={total ?? 0}
+              onPageChange={setPage}
+              limit={limit}
+              setLimit={setLimit}
+            />
+            {/* <div className='flex justify-between items-center mt-4'>
+              <div className='text-xs'>Total Records: {total}</div>
+            </div> */}
           </CardContent>
         </Card>
       </div>
