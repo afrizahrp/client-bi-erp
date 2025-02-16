@@ -8,7 +8,7 @@ export const useCategories = () => {
 
   const company_id =  session?.user?.company_id.toUpperCase().trim();
   const page = 1;
-  const limit = 10;
+  const limit = 100;
 
   const { data, isLoading, error, ...rest } = useQuery<any[], Error>({
     queryKey: ['categories', company_id, page, limit],
