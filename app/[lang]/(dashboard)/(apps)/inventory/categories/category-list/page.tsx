@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { Card, CardContent } from '@/components/ui/card';
 import { CategoryListTable } from './category-list-table';
@@ -33,10 +33,9 @@ const pageHeader = {
 };
 
 const CategoryListPage = () => {
-
-  const { data: categories = [], isLoading, error } = useCategories();
-
-
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const { data, isLoading, error } = useCategories(page, limit);
 
   if (isLoading) {
     return <LayoutLoader />;
@@ -53,7 +52,18 @@ const CategoryListPage = () => {
       <div>
         <Card className='mt-6'>
           <CardContent className='p-10'>
-            <CategoryListTable data={categories as CategoryColumns[]} />
+            <CategoryListTable data={data?.data as CategoryColumns[]} />
+            <div className="pagination">
+              <button onClick={() => setPage((prev) => Math.max(prev - 1, 1))}>
+                Previous
+              </button>
+              <span>
+                Page {page} of {Math.ceil(data?.total / limit)}
+              </span>
+              <button onClick={() => setPage((prev) => prev + 1)}>
+                Next
+              </button>
+            </div>
           </CardContent>
         </Card>
       </div>
