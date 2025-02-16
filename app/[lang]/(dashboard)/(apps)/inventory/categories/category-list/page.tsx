@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import { useSession } from 'next-auth/react';
 import { Card, CardContent } from '@/components/ui/card';
 import { CategoryListTable } from './category-list-table';
 import PageHeader from '@/components/page-header';
@@ -10,7 +11,7 @@ import LayoutLoader from '@/components/layout-loader';
 interface CategoryColumns {
   id: string;
   name: string;
-  type: string;
+  type: number;
   categoryType: string;
   iStatus: number;
   status: string;
@@ -31,9 +32,11 @@ const pageHeader = {
   ],
 };
 
-const CategoryListPage = ({ session }: { session: any }) => {
-  const company_id = session?.user?.company_id; // Ambil company_id dari sesi
-  const { data: categories = [], isLoading, error } = useCategories(company_id);
+const CategoryListPage = () => {
+
+  const { data: categories = [], isLoading, error } = useCategories();
+
+
 
   if (isLoading) {
     return <LayoutLoader />;

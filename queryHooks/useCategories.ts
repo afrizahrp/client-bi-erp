@@ -1,14 +1,21 @@
-import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
+
 import { api } from '@/config/axios.config';
 
-export const useCategories = (company_id: string) => {
+export const useCategories = () => {
+  const { data: session } = useSession();
+
+  const company_id =  session?.user?.company_id.toUpperCase().trim();
+  const page = 1;
+  const limit = 10;
+
   const { data, isLoading, error, ...rest } = useQuery<any[], Error>({
-    queryKey: ['categories', company_id],
+    queryKey: ['categories', company_id, page, limit],
     queryFn: () =>
       api
         .get('/categories', {
-          params: { company_id },
+          params: { company_id, page, limit },
         })
         .then((res) =>
           res.data.map((item: any) => ({
@@ -24,6 +31,8 @@ export const useCategories = (company_id: string) => {
     staleTime: 60 * 1000, // 60s
     retry: 3,
   });
+
+console.log('categories hooks', data);
 
   return { data, isLoading, error, ...rest };
 };

@@ -2,7 +2,7 @@ import { useSidebar } from "@/store";
 import Image from "next/image";
 import React from "react";
 import { Pin } from 'lucide-react';
-import { useSession, getSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 
 const SidebarLogo = ({  hovered }: {  hovered?: boolean }) => {
@@ -27,7 +27,6 @@ const SidebarLogo = ({  hovered }: {  hovered?: boolean }) => {
 
   }
 
-  console.log("Company ID:", companyId); // Tambahkan console.log di sini untuk memeriksa nilai company_id
 
   return (
     <div className="px-4 py-4 ">
