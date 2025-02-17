@@ -32,8 +32,7 @@ const pageHeader = {
 
 const CategoryListPage = () => {
   const { data: session } = useSession();
-  const company_id = 'BIS';
-  //  session?.user?.company_id?.trim().toUpperCase() || ''; // Ambil company_id dari sesi dan konversi ke huruf besar
+  const company_id = session?.user?.company_id?.trim().toUpperCase() || ''; // Ambil company_id dari sesi dan konversi ke huruf besar
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);

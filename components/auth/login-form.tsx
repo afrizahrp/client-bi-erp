@@ -1,18 +1,25 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { signIn } from "next-auth/react";
-import toast from "react-hot-toast";
-import Link from "next/link";
-import { Icon } from "@iconify/react";
-import { CardWrapper } from "@/components/auth/card-wrapper";
-import CompanyCombobox from "../ui/company-combobox";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { signIn } from 'next-auth/react';
+import toast from 'react-hot-toast';
+import Link from 'next/link';
+import { Icon } from '@iconify/react';
+import { CardWrapper } from '@/components/auth/card-wrapper';
+import CompanyCombobox from '../ui/company-combobox';
 import { LoginSchema } from '@/utils/schema/login.schema';
-import { useMediaQuery } from "@/hooks/use-media-query";
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 // const schema = z.object({
 //   // name: z.string().email({ message: "Your email is invalid." }),
@@ -23,35 +30,41 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 
 const LogInForm = () => {
   const [isPending, startTransition] = React.useTransition();
-  const [passwordType, setPasswordType] = React.useState("password");
-  const isDesktop2xl = useMediaQuery("(max-width: 1530px)");
+  const [passwordType, setPasswordType] = React.useState('password');
+  const isDesktop2xl = useMediaQuery('(max-width: 1530px)');
 
   const togglePasswordType = () => {
-    setPasswordType((prevType) => (prevType === "password" ? "text" : "password"));
+    setPasswordType((prevType) =>
+      prevType === 'password' ? 'text' : 'password'
+    );
   };
 
   const form = useForm({
     resolver: zodResolver(LoginSchema),
-    mode: "all",
+    mode: 'all',
     defaultValues: {
-      name: "afriza-bis",
-      password: "1234567",
-      company_id: "",
+      name: 'afriza-bis',
+      password: '1234567',
+      company_id: '',
     },
   });
 
-  const onSubmit = (data: { name: string; password: string; company_id: string }) => {
-console.log(data);
+  const onSubmit = (data: {
+    name: string;
+    password: string;
+    company_id: string;
+  }) => {
+    console.log(data);
     startTransition(async () => {
-      let response = await signIn("credentials", {
+      let response = await signIn('credentials', {
         name: data.name,
         password: data.password,
-        company_id: data.company_id,
+        company_id: data.company_id.toLocaleUpperCase(),
         redirect: false,
       });
       if (response?.ok) {
-        toast.success("Login Successful");
-        window.location.assign("/dashboard");
+        toast.success('Login Successful');
+        window.location.assign('/dashboard');
         form.reset();
       } else if (response?.error) {
         toast.error(response?.error);
@@ -60,7 +73,11 @@ console.log(data);
   };
 
   return (
-    <CardWrapper backButtonLabel="Don't have an account ?" backButtonHref='/auth/register' showSocial>
+    <CardWrapper
+      backButtonLabel="Don't have an account ?"
+      backButtonHref='/auth/register'
+      showSocial
+    >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
           <div className='space-y-4'>
@@ -106,9 +123,15 @@ console.log(data);
                         onClick={togglePasswordType}
                       >
                         {passwordType === 'password' ? (
-                          <Icon icon='heroicons:eye-slash' className='w-4 h-4 text-gray-500 dark:text-gray-400' />
+                          <Icon
+                            icon='heroicons:eye-slash'
+                            className='w-4 h-4 text-gray-500 dark:text-gray-400'
+                          />
                         ) : (
-                          <Icon icon='heroicons:eye' className='w-4 h-4 text-gray-500 dark:text-gray-400' />
+                          <Icon
+                            icon='heroicons:eye'
+                            className='w-4 h-4 text-gray-500 dark:text-gray-400'
+                          />
                         )}
                       </div>
                     </div>
