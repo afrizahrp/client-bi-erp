@@ -14,19 +14,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { signIn } from 'next-auth/react';
 import toast from 'react-hot-toast';
-import Link from 'next/link';
 import { Icon } from '@iconify/react';
 import { CardWrapper } from '@/components/auth/card-wrapper';
-import CompanyCombobox from '../ui/company-combobox';
+import CompanyCombobox from '../../../../../components/ui/company-combobox';
 import { LoginSchema } from '@/utils/schema/login.schema';
 import { useMediaQuery } from '@/hooks/use-media-query';
-
-// const schema = z.object({
-//   // name: z.string().email({ message: "Your email is invalid." }),
-//    name: z.string().min(4),
-//   password: z.string().min(4),
-//   company_id: z.string().min(1, { message: "Please select a company." }),
-// });
 
 const LogInForm = () => {
   const [isPending, startTransition] = React.useTransition();
@@ -54,7 +46,6 @@ const LogInForm = () => {
     password: string;
     company_id: string;
   }) => {
-    console.log(data);
     startTransition(async () => {
       let response = await signIn('credentials', {
         name: data.name,
@@ -74,6 +65,7 @@ const LogInForm = () => {
 
   return (
     <CardWrapper
+      headerLabel='Login'
       backButtonLabel="Don't have an account ?"
       backButtonHref='/auth/register'
       showSocial
@@ -124,12 +116,12 @@ const LogInForm = () => {
                       >
                         {passwordType === 'password' ? (
                           <Icon
-                            icon='heroicons:eye-slash'
+                            icon='heroicons:eye'
                             className='w-4 h-4 text-gray-500 dark:text-gray-400'
                           />
                         ) : (
                           <Icon
-                            icon='heroicons:eye'
+                            icon='heroicons:eye-slash'
                             className='w-4 h-4 text-gray-500 dark:text-gray-400'
                           />
                         )}
@@ -162,12 +154,12 @@ const LogInForm = () => {
           <Button
             disabled={isPending}
             type='submit'
-            className='w-full bg-blue-500 hover:bg-blue-600 
+            className='w-full bg-blue-700 hover:bg-blue-600 
                        text-white dark:bg-blue-600 dark:hover:bg-blue-700'
           >
             Login
           </Button>
-          <Button
+          {/* <Button
             size='sm'
             variant='link'
             asChild
@@ -177,7 +169,7 @@ const LogInForm = () => {
                        dark:text-blue-400 dark:hover:text-white'
           >
             <Link href='/auth/reset'>Forgot password ?</Link>
-          </Button>
+          </Button> */}
         </form>
       </Form>
     </CardWrapper>

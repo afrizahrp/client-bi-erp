@@ -1,13 +1,11 @@
-import React from "react";
-import LoginForm from '@/components/auth/login-form';
-
+import React from 'react';
+import LoginForm from '@/app/[lang]/auth/(login)/login/login-form';
 
 // const page = () => {
 //   return <LandingPage />;
 // };
 
 // export default page;
-
 
 export default function Home() {
   return (

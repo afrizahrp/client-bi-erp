@@ -79,4 +79,10 @@ export const RegisterSchema = z.object({
   name: z.string().min(1, {
     message: 'Name is required',
   }),
+  company_id: z.string().min(3, {
+    message: 'Company is required',
+  }),
+  branch_id: z.string().min(3, {
+    message: 'Company is required',
+  }),
 });

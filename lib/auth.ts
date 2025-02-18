@@ -1,26 +1,19 @@
+import { Backend_URL } from '@/lib/Constants';
+import { NextAuthOptions } from 'next-auth';
+import { JWT } from 'next-auth/jwt';
+import NextAuth from 'next-auth/next';
+import CredentialsProvider from 'next-auth/providers/credentials';
 
-import { Backend_URL } from "@/lib/Constants";
-import { NextAuthOptions } from "next-auth";
-import { JWT } from "next-auth/jwt";
-import Credentials from "next-auth/providers/credentials";
-import NextAuth from "next-auth/next";
-import CredentialsProvider from "next-auth/providers/credentials";
-
-// import {User as UserType, user} from "@/app/api/user/data";
-// import GoogleProvider from "next-auth/providers/google";
-// import GithubProvider from "next-auth/providers/github";
-
-import avatar3 from "@/public/images/avatar/avatar-3.jpg";
-
+import avatar3 from '@/public/images/avatar/avatar-3.jpg';
 
 async function refreshToken(token: JWT): Promise<JWT> {
-  const res = await fetch(Backend_URL + "/auth/refresh", {
-    method: "POST",
+  const res = await fetch(Backend_URL + '/auth/refresh', {
+    method: 'POST',
     headers: {
       authorization: `Refresh ${token.backendTokens.refreshToken}`,
     },
   });
-  console.log("refreshed");
+  console.log('refreshed');
 
   const response = await res.json();
 
@@ -33,30 +26,75 @@ async function refreshToken(token: JWT): Promise<JWT> {
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: 'Credentials',
       credentials: {
         name: {
-          label: "Username",
-          type: "text",
-          placeholder: "jsmith",
+          label: 'Username',
+          type: 'text',
+          placeholder: 'jsmith',
         },
-        password: { label: "Password", type: "password" },
-        company_id: { label: "Company ID", type: "text" },
+        password: { label: 'Password', type: 'password' },
+        company_id: { label: 'Company ID', type: 'text' },
       },
       async authorize(credentials, req) {
-        console.log("Credentials:", credentials); // Tambahkan ini
-
-        if (!credentials?.name || !credentials?.password || !credentials?.company_id) return null;
-        const { name, password ,company_id} = credentials;
-        const res = await fetch(Backend_URL + "/auth/login", {
-          method: "POST",
+        if (
+          !credentials?.name ||
+          !credentials?.password ||
+          !credentials?.company_id
+        )
+          return null;
+        const { name, password, company_id } = credentials;
+        const res = await fetch(Backend_URL + '/auth/login', {
+          method: 'POST',
           body: JSON.stringify({
             name,
             password,
-            company_id
+            company_id,
           }),
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
+          },
+        });
+        if (res.status == 401) {
+          console.log(res.statusText);
+          return null;
+        }
+        const user = await res.json();
+        return user;
+      },
+    }),
+
+    CredentialsProvider({
+      name: 'Register',
+      credentials: {
+        name: {
+          label: 'Username',
+          type: 'text',
+          placeholder: 'jsmith',
+        },
+        password: { label: 'Password', type: 'password' },
+        company_id: { label: 'Company ID', type: 'text' },
+        email: { label: 'Email', type: 'email' },
+      },
+      async authorize(credentials, req) {
+        if (
+          !credentials?.name ||
+          !credentials?.password ||
+          !credentials?.company_id ||
+          !credentials?.email
+        )
+          return null;
+        const { name, password, company_id, email } = credentials;
+        const res = await fetch(Backend_URL + '/auth/register', {
+          method: 'POST',
+          body: JSON.stringify({
+            name,
+            password,
+            company_id,
+            email,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
           },
         });
         if (res.status == 401) {
@@ -73,8 +111,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) return { ...token, ...user };
 
-      if (new Date().getTime() < token.backendTokens.expiresIn)
-        return token;
+      if (new Date().getTime() < token.backendTokens.expiresIn) return token;
 
       return await refreshToken(token);
     },

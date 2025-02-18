@@ -1,16 +1,16 @@
-import { Poppins } from 'next/font/google'
-import { cn } from '@/lib/utils'
+import { Poppins } from 'next/font/google';
+import { cn } from '@/lib/utils';
 
 const font = Poppins({
   subsets: ['latin'],
-  weight: ['600']
-})
+  weight: ['600'],
+});
 
 interface HeaderProps {
   label: string;
 }
 
-import Image from 'next/image'
+import Image from 'next/image';
 
 export const Header: React.FC<HeaderProps> = ({ label }) => {
   return (
@@ -18,14 +18,19 @@ export const Header: React.FC<HeaderProps> = ({ label }) => {
       <Image
         src='/images/logo/logo.png'
         alt='logoAtlogin'
-        width={120}
-        height={120}
+        width={80}
+        height={80}
         style={{ top: 0, textAlign: 'left' }}
         priority
       />
-      <h1 className={cn('text-md font-semibold text-blue-700 drop-shadow-md -mt-4', font.className)}>
+      <h1
+        className={cn(
+          'text-md font-semibold text-blue-700 drop-shadow-md -mt-4',
+          font.className
+        )}
+      >
         {label}
-      </h1>    
+      </h1>
     </div>
-  )
-}
+  );
+};
