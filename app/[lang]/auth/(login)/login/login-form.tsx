@@ -37,20 +37,20 @@ const LogInForm = () => {
     defaultValues: {
       name: 'afriza-bis',
       password: '1234567',
-      company_id: '',
+      // company_id: '',
     },
   });
 
   const onSubmit = (data: {
     name: string;
     password: string;
-    company_id: string;
+    // company_id: string;
   }) => {
     startTransition(async () => {
       let response = await signIn('credentials', {
         name: data.name,
         password: data.password,
-        company_id: data.company_id.toLocaleUpperCase(),
+        // company_id: data.company_id.toLocaleUpperCase(),
         redirect: false,
       });
       if (response?.ok) {
@@ -132,7 +132,8 @@ const LogInForm = () => {
                 </FormItem>
               )}
             />
-            <FormField
+
+            {/* <FormField
               control={form.control}
               name='company_id'
               render={({ field }) => (
@@ -149,7 +150,7 @@ const LogInForm = () => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </div>
           <Button
             disabled={isPending}

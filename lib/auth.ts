@@ -34,22 +34,21 @@ export const authOptions: NextAuthOptions = {
           placeholder: 'jsmith',
         },
         password: { label: 'Password', type: 'password' },
-        company_id: { label: 'Company ID', type: 'text' },
+        // company_id: { label: 'Company ID', type: 'text' },
       },
       async authorize(credentials, req) {
         if (
           !credentials?.name ||
-          !credentials?.password ||
-          !credentials?.company_id
+          !credentials?.password
+          // ||!credentials?.company_id
         )
           return null;
-        const { name, password, company_id } = credentials;
+        const { name, password } = credentials;
         const res = await fetch(Backend_URL + '/auth/login', {
           method: 'POST',
           body: JSON.stringify({
             name,
             password,
-            company_id,
           }),
           headers: {
             'Content-Type': 'application/json',
@@ -73,24 +72,24 @@ export const authOptions: NextAuthOptions = {
           placeholder: 'jsmith',
         },
         password: { label: 'Password', type: 'password' },
-        company_id: { label: 'Company ID', type: 'text' },
+        // company_id: { label: 'Company ID', type: 'text' },
         email: { label: 'Email', type: 'email' },
       },
       async authorize(credentials, req) {
         if (
           !credentials?.name ||
-          !credentials?.password ||
-          !credentials?.company_id ||
-          !credentials?.email
+          !credentials?.email ||
+          !credentials?.password
+          // !credentials?.company_id ||
         )
           return null;
-        const { name, password, company_id, email } = credentials;
+        const { name, password, email } = credentials;
         const res = await fetch(Backend_URL + '/auth/register', {
           method: 'POST',
           body: JSON.stringify({
             name,
             password,
-            company_id,
+            // company_id,
             email,
           }),
           headers: {

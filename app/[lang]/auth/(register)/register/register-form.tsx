@@ -21,7 +21,7 @@ import { Button } from '@/components/ui/button';
 import { FormError } from '@/components/form-error';
 import { FormSuccess } from '@/components/form-success';
 import { Backend_URL } from '@/lib/Constants';
-import CompanyCombobox from '@/components/ui/company-combobox';
+// import CompanyCombobox from '@/components/ui/company-combobox';
 
 export const RegisterForm = () => {
   const [error, setError] = useState<string | undefined>('');
@@ -37,11 +37,9 @@ export const RegisterForm = () => {
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
-      name: 'afriza-bis',
+      name: 'afriza-bip',
       password: '1234567',
       email: 'afriza@mail.com',
-      company_id: 'BIS',
-      branch_id: 'BIS',
     },
   });
 
@@ -56,10 +54,7 @@ export const RegisterForm = () => {
           body: JSON.stringify({
             name: values.name,
             password: values.password,
-            role_id: 'GUEST',
             email: values.email,
-            company_id: values.company_id,
-            branch_id: values.company_id,
           }),
           headers: {
             'Content-Type': 'application/json',
@@ -160,24 +155,6 @@ export const RegisterForm = () => {
                         )}
                       </div>
                     </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='company_id'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className='text-sm'>Company</FormLabel>
-                  <FormControl>
-                    <CompanyCombobox
-                      disabled={isPending}
-                      value={field.value}
-                      onChange={field.onChange}
-                      className='w-full'
-                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
