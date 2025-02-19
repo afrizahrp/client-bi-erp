@@ -10,7 +10,7 @@ async function refreshToken(token: JWT): Promise<JWT> {
   const res = await fetch(Backend_URL + '/auth/refresh', {
     method: 'POST',
     headers: {
-      authorization: `Refresh ${token.backendTokens.refreshToken}`,
+      authorization: `Refresh ${token.refreshToken}`,
     },
   });
   console.log('refreshed');
@@ -54,54 +54,20 @@ export const authOptions: NextAuthOptions = {
             'Content-Type': 'application/json',
           },
         });
-        if (res.status == 401) {
-          console.log(res.statusText);
-          return null;
-        }
-        const user = await res.json();
-        return user;
-      },
-    }),
+        console.log('Login response status:', res.status);
 
-    CredentialsProvider({
-      name: 'Register',
-      credentials: {
-        name: {
-          label: 'Username',
-          type: 'text',
-          placeholder: 'jsmith',
-        },
-        password: { label: 'Password', type: 'password' },
-        // company_id: { label: 'Company ID', type: 'text' },
-        email: { label: 'Email', type: 'email' },
-      },
-      async authorize(credentials, req) {
-        if (
-          !credentials?.name ||
-          !credentials?.email ||
-          !credentials?.password
-          // !credentials?.company_id ||
-        )
-          return null;
-        const { name, password, email } = credentials;
-        const res = await fetch(Backend_URL + '/auth/register', {
-          method: 'POST',
-          body: JSON.stringify({
-            name,
-            password,
-            // company_id,
-            email,
-          }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
         if (res.status == 401) {
           console.log(res.statusText);
           return null;
         }
         const user = await res.json();
-        return user;
+        console.log('Login successful:', user);
+
+        return {
+          ...user,
+          accessToken: user.accessToken,
+          expiresIn: new Date().getTime() + 3600 * 1000, // Example expiration time
+        };
       },
     }),
   ],
@@ -110,14 +76,16 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) return { ...token, ...user };
 
-      if (new Date().getTime() < token.backendTokens.expiresIn) return token;
+      if (new Date().getTime() < token.expiresIn) return token;
 
       return await refreshToken(token);
     },
 
     async session({ token, session }) {
       session.user = token.user;
-      session.backendTokens = token.backendTokens;
+      session.accessToken = token.accessToken;
+
+      // session.backendTokens = token.backendTokens;
 
       return session;
     },

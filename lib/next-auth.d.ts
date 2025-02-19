@@ -1,7 +1,7 @@
-import NextAuth from "next-auth";
-import { JWT } from "next-auth/jwt";
+import NextAuth from 'next-auth';
+import { JWT } from 'next-auth/jwt';
 
-declare module "next-auth" {
+declare module 'next-auth' {
   interface Session {
     user: {
       id: number;
@@ -12,16 +12,12 @@ declare module "next-auth" {
       company_id: string;
     };
 
-    backendTokens: {
-      accessToken: string;
-      refreshToken: string;
-      expiresIn: number;
-    };
+    accessToken: string;
+    expiresIn: number;
   }
 }
 
-
-declare module "next-auth/jwt" {
+declare module 'next-auth/jwt' {
   interface JWT {
     user: {
       id: number;
@@ -30,13 +26,15 @@ declare module "next-auth/jwt" {
       role_id: string;
       image: string;
       company_id: string;
-
     };
 
-    backendTokens: {
-      accessToken: string;
-      refreshToken: string;
-      expiresIn: number;
-    };
+    accessToken: string;
+    expiresIn: number;
+    // refreshToken: string;
+    // backendTokens: {
+    //   accessToken: string;
+    //   refreshToken: string;
+    //   expiresIn: number;
+    // };
   }
 }
