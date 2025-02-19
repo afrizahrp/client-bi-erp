@@ -42,19 +42,19 @@ export type Shadow = 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
 export type Radius = 'none' | 'sm' | 'md' | 'lg' | 'xl';
 
-export type FormState =
-  | {
-      error?: {
-        name?: string[];
-        email?: string[];
-        password?: string[];
-      };
-      message?: string;
-    }
-  | undefined;
+// export type FormState =
+//   | {
+//       error?: {
+//         name?: string[];
+//         email?: string[];
+//         password?: string[];
+//       };
+//       message?: string;
+//     }
+//   | undefined;
 
-export enum Role {
-  ADMIN = 'ADMIN',
-  EDITOR = 'EDITOR',
-  USER = 'USER',
-}
+// export enum Role {
+//   ADMIN = 'ADMIN',
+//   EDITOR = 'EDITOR',
+//   USER = 'USER',
+// }
