@@ -20,7 +20,7 @@ import { CardWrapper } from '@/components/auth/card-wrapper';
 import { Button } from '@/components/ui/button';
 import { FormError } from '@/components/form-error';
 import { FormSuccess } from '@/components/form-success';
-import { Backend_URL } from '@/lib/Constants';
+import { Backend_URL } from '@/lib/constants';
 // import CompanyCombobox from '@/components/ui/company-combobox';
 
 export const RegisterForm = () => {

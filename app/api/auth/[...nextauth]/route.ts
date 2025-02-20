@@ -1,11 +1,9 @@
-import { authOptions } from "@/lib/auth";
-import NextAuth from "next-auth/next";
+import { authOptions } from '@/lib/auth';
+import NextAuth from 'next-auth/next';
 
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
-
-
 
 // import { Backend_URL } from "@/lib/Constants";
 // import { NextAuthOptions } from "next-auth";

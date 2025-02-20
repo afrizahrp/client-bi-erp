@@ -1,4 +1,4 @@
-import { BACKEND_URL } from '@/lib/Constants';
+import { BACKEND_URL } from '@/lib/constants';
 import { NextAuthOptions } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import NextAuth from 'next-auth/next';
@@ -61,6 +61,7 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
         const user = await res.json();
+        console.log('User:', user);
         return user;
       },
     }),
@@ -70,17 +71,14 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) return { ...token, ...user };
 
-      if (new Date().getTime() < token.expiresIn) return token;
+      if (new Date().getTime() < token.backendTokens.expiresIn) return token;
 
       return await refreshToken(token);
     },
 
     async session({ token, session }) {
       session.user = token.user;
-      session.accessToken = token.accessToken;
-
-      // session.backendTokens = token.backendTokens;
-
+      session.backendTokens = token.backendTokens;
       return session;
     },
   },

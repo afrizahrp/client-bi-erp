@@ -19,6 +19,7 @@ import { CardWrapper } from '@/components/auth/card-wrapper';
 import CompanyCombobox from '../../../../../components/ui/company-combobox';
 import { LoginSchema } from '@/utils/schema/login.schema';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import { redirect } from 'next/navigation';
 
 const LogInForm = () => {
   const [isPending, startTransition] = React.useTransition();
@@ -51,10 +52,12 @@ const LogInForm = () => {
         name: data.name,
         password: data.password,
         // company_id: data.company_id.toLocaleUpperCase(),
+
         redirect: false,
       });
       if (response?.ok) {
         toast.success('Login Successful');
+        // redirect('/dashboard');
         window.location.assign('/dashboard');
         form.reset();
       } else if (response?.error) {

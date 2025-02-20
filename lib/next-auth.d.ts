@@ -11,9 +11,11 @@ declare module 'next-auth' {
       image: string;
       company_id: string;
     };
-
-    accessToken: string;
-    expiresIn: number;
+    backendTokens: {
+      accessToken: string;
+      refreshToken: string;
+      expiresIn: number;
+    };
   }
 }
 
@@ -28,13 +30,14 @@ declare module 'next-auth/jwt' {
       company_id: string;
     };
 
-    accessToken: string;
-    expiresIn: number;
+    // accessToken: string;
     // refreshToken: string;
-    // backendTokens: {
-    //   accessToken: string;
-    //   refreshToken: string;
-    //   expiresIn: number;
-    // };
+    // expiresIn: number;
+    // refreshToken: string;
+    backendTokens: {
+      accessToken: string;
+      refreshToken: string;
+      expiresIn: number;
+    };
   }
 }

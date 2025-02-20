@@ -1,15 +1,16 @@
 'use server';
 
 import { redirect } from 'next/navigation';
-import { BACKEND_URL } from './constants';
-import { FormState, LoginFormSchema, SignupFormSchema } from './type';
-import { createSession, updateTokens } from './session';
+import { BACKEND_URL } from '@/lib/constants';
+import { FormState } from './type';
+import { LoginSchema, RegisterSchema } from '@/utils/schema/login.schema';
+import { createSession, updateTokens } from '@/lib/session';
 
 export async function signUp(
   state: FormState,
   formData: FormData
 ): Promise<FormState> {
-  const validationFields = SignupFormSchema.safeParse({
+  const validationFields = RegisterSchema.safeParse({
     name: formData.get('name'),
     email: formData.get('email'),
     password: formData.get('password'),
@@ -43,7 +44,7 @@ export async function signIn(
   state: FormState,
   formData: FormData
 ): Promise<FormState> {
-  const validatedFields = LoginFormSchema.safeParse({
+  const validatedFields = LoginSchema.safeParse({
     email: formData.get('email'),
     password: formData.get('password'),
   });
