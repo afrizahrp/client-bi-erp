@@ -20,7 +20,7 @@ import { CardWrapper } from '@/components/auth/card-wrapper';
 import { Button } from '@/components/ui/button';
 import { FormError } from '@/components/form-error';
 import { FormSuccess } from '@/components/form-success';
-import { Backend_URL } from '@/lib/constants';
+import { BACKEND_URL } from '@/lib/constants';
 // import CompanyCombobox from '@/components/ui/company-combobox';
 
 export const RegisterForm = () => {
@@ -49,12 +49,14 @@ export const RegisterForm = () => {
 
     startTransition(async () => {
       try {
-        const response = await fetch(Backend_URL + '/auth/register', {
+        const response = await fetch(BACKEND_URL + '/auth/register', {
           method: 'POST',
           body: JSON.stringify({
             name: values.name,
             password: values.password,
             email: values.email,
+            role_id: 'GUEST',
+            company_id: 'BIS',
           }),
           headers: {
             'Content-Type': 'application/json',
