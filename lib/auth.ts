@@ -1,8 +1,13 @@
 import { BACKEND_URL } from '@/lib/constants';
 import { NextAuthOptions } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
+import Credentials from 'next-auth/providers/credentials';
 import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
+
+// import {User as UserType, user} from "@/app/api/user/data";
+// import GoogleProvider from "next-auth/providers/google";
+// import GithubProvider from "next-auth/providers/github";
 
 import avatar3 from '@/public/images/avatar/avatar-3.jpg';
 
@@ -10,7 +15,7 @@ async function refreshToken(token: JWT): Promise<JWT> {
   const res = await fetch(BACKEND_URL + '/auth/refresh', {
     method: 'POST',
     headers: {
-      authorization: `Refresh ${token.refreshToken}`,
+      authorization: `Refresh ${token.backendTokens.refreshToken}`,
     },
   });
   console.log('refreshed');
@@ -37,6 +42,8 @@ export const authOptions: NextAuthOptions = {
         // company_id: { label: 'Company ID', type: 'text' },
       },
       async authorize(credentials, req) {
+        console.log('Credentials:', credentials); // Tambahkan ini
+
         if (
           !credentials?.name ||
           !credentials?.password
@@ -54,14 +61,11 @@ export const authOptions: NextAuthOptions = {
             'Content-Type': 'application/json',
           },
         });
-        console.log('Login response status:', res.status);
-
         if (res.status == 401) {
           console.log(res.statusText);
           return null;
         }
         const user = await res.json();
-        console.log('User:', user);
         return user;
       },
     }),
@@ -79,6 +83,7 @@ export const authOptions: NextAuthOptions = {
     async session({ token, session }) {
       session.user = token.user;
       session.backendTokens = token.backendTokens;
+
       return session;
     },
   },
