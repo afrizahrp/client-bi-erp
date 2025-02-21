@@ -15,7 +15,7 @@ async function refreshToken(token: JWT): Promise<JWT> {
   const res = await fetch(BACKEND_URL + '/auth/refresh', {
     method: 'POST',
     headers: {
-      authorization: `Refresh ${token.backendTokens.refreshToken}`,
+      authorization: `Refresh ${token.refreshToken}`,
     },
   });
   console.log('refreshed');
@@ -24,7 +24,7 @@ async function refreshToken(token: JWT): Promise<JWT> {
 
   return {
     ...token,
-    backendTokens: response,
+    refreshToken: response.refreshToken,
   };
 }
 
@@ -75,14 +75,16 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) return { ...token, ...user };
 
-      if (new Date().getTime() < token.backendTokens.expiresIn) return token;
+      if (new Date().getTime() < token.expiresIn) return token;
 
       return await refreshToken(token);
     },
 
     async session({ token, session }) {
       session.user = token.user;
-      session.backendTokens = token.backendTokens;
+      session.accessToken = token.accessToken;
+      session.refreshToken = token.refreshToken;
+      // session.backendTokens = token.backendTokens;
 
       return session;
     },

@@ -1,4 +1,3 @@
-
 // import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 // import ReportsSnapshot from './components/reports-snapshot';
 // import CountryMap from './components/country-map';
@@ -10,7 +9,9 @@
 // import TopTen from './components/top-ten';
 // import TopPage from './components/top-page';
 // import DatePickerWithRange from '@/components/date-picker-with-range';
-import React  from 'react';
+'use client';
+import React from 'react';
+import { useSession } from 'next-auth/react';
 
 interface DashboardPageViewProps {
   trans: {
@@ -18,12 +19,11 @@ interface DashboardPageViewProps {
   };
 }
 const DashboardPageView = ({ trans }: DashboardPageViewProps) => {
+  const { data: session } = useSession();
 
- 
-  return (
-      <div>This page is for dashboard</div>
-      
-  );
+  const welcome = `Selamat datang ${session?.user?.name}`;
+
+  return <div>{welcome}</div>;
 };
 
 // <div className="space-y-6">
