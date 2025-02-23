@@ -12,15 +12,12 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-// import { signIn } from 'next-auth/react';
 import { signIn } from '@/lib/auth';
 import toast from 'react-hot-toast';
 import { Icon } from '@iconify/react';
 import { CardWrapper } from '@/components/auth/card-wrapper';
-import CompanyCombobox from '../../../../../components/ui/company-combobox';
 import { LoginSchema } from '@/utils/schema/login.schema';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import { redirect } from 'next/navigation';
 import { useFormState } from 'react-dom';
 
 const LogInForm = () => {
@@ -40,19 +37,25 @@ const LogInForm = () => {
     defaultValues: {
       name: 'afriza-1',
       password: '1234567',
-      // company_id: '',
     },
   });
 
   const onSubmit = (data: { name: string; password: string }) => {
+    console.log('Form data:', data); // Debugging log
     startTransition(async () => {
-      const response = await signIn(data.name, data.password);
-      if (response.ok) {
-        toast.success('Login Successful');
-        window.location.assign('/dashboard');
-        form.reset();
-      } else if (response.error) {
-        toast.error(response.error);
+      try {
+        const response = await signIn(data.name, data.password);
+        console.log('Response:', response); // Debugging log
+        if (response.ok) {
+          toast.success('Login Successful');
+          window.location.assign('/dashboard');
+          form.reset();
+        } else if (response.error) {
+          toast.error(response.error);
+        }
+      } catch (error) {
+        console.error('Error during signIn:', error); // Debugging log
+        toast.error('An error occurred during login.');
       }
     });
   };
@@ -126,25 +129,6 @@ const LogInForm = () => {
                 </FormItem>
               )}
             />
-
-            {/* <FormField
-              control={form.control}
-              name='company_id'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className='text-sm'>Company</FormLabel>
-                  <FormControl>
-                    <CompanyCombobox
-                      disabled={isPending}
-                      value={field.value}
-                      onChange={field.onChange}
-                      className='w-full'
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
           </div>
           <Button
             disabled={isPending}
@@ -154,17 +138,6 @@ const LogInForm = () => {
           >
             Login
           </Button>
-          {/* <Button
-            size='sm'
-            variant='link'
-            asChild
-            className='px-0 font-normal text-sm 
-                       bg-transparent
-                       text-blue-800
-                       dark:text-blue-400 dark:hover:text-white'
-          >
-            <Link href='/auth/reset'>Forgot password ?</Link>
-          </Button> */}
         </form>
       </Form>
     </CardWrapper>

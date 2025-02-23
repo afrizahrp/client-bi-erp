@@ -14,7 +14,7 @@ const layout = async ({
 }) => {
   const session = await getSession();
 
-  console.log(session);
+  // console.log('session:', session);
 
   if (!session?.user?.name) {
     redirect('/auth/login');

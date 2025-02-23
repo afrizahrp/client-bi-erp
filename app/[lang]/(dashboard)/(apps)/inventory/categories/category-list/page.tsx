@@ -33,17 +33,19 @@ const pageHeader = {
 };
 
 const CategoryListPage = () => {
-  // const { data: session } = useSession();
   const { session } = useAuth();
-
   const company_id = session?.user?.company_id?.trim().toUpperCase() || ''; // Ambil company_id dari sesi dan konversi ke huruf besar
+  const token = session?.accessToken || ''; // Ambil token dari sesi
+
+  console.log('token:', token);
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const { data, total, isLoading, error } = useCategories(
     company_id,
     page,
-    limit
+    limit,
+    token
   );
 
   const [categories, setCategories] = useState<CategoryColumns[]>([]);

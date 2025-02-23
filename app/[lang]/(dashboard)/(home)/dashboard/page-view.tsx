@@ -22,7 +22,7 @@ interface DashboardPageViewProps {
 const DashboardPageView = ({ trans }: DashboardPageViewProps) => {
   // const { data: session } = useSession();
   const { session } = useAuth();
-  console.log(session);
+  // console.log(session);
   const welcome = `Selamat datang ${session?.user?.name}`;
 
   return <div>{welcome}</div>;

@@ -9,7 +9,7 @@ export async function signUp(
   state: FormState,
   formData: FormData
 ): Promise<FormState> {
-  const response = await fetch(`${BACKEND_URL}/auth/signup`, {
+  const response = await fetch(`${BACKEND_URL}/auth/register`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ export async function signUp(
   });
 
   if (response.ok) {
-    redirect('/auth/signin');
+    redirect('/auth/login');
   } else {
     return {
       message:
@@ -37,7 +37,7 @@ export async function signIn(
   name: string,
   password: string
 ): Promise<{ ok: boolean; error?: string }> {
-  const response = await fetch(`${BACKEND_URL}/auth/signin`, {
+  const response = await fetch(`${BACKEND_URL}/auth/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -50,19 +50,21 @@ export async function signIn(
 
   if (response.ok) {
     const result = await response.json();
+
+    // console.log('Result:', result);
     // Create The Session For Authenticated User.
 
     await createSession({
       user: {
-        id: result.id,
-        name: result.name,
-        role_id: result.role_id,
-        company_id: result.company_id,
-        email: result.email,
-        image: result.image,
+        id: result.user.id,
+        name: result.user.name,
+        company_id: result.user.company_id,
+        role_id: result.user.role_id,
+        email: result.user.email,
+        image: result.user.image,
       },
-      accessToken: result.accessToken,
-      refreshToken: result.refreshToken,
+      accessToken: result.user.accessToken,
+      refreshToken: result.user.refreshToken,
     });
     return { ok: true };
   } else {
