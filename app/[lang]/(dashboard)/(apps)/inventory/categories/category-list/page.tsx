@@ -34,14 +34,20 @@ const pageHeader = {
 
 const CategoryListPage = () => {
   const { session } = useAuth();
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+
+  // Tunggu hingga sesi tersedia
+  if (!session) {
+    return <LayoutLoader />;
+  }
+
   const company_id = session?.user?.company_id?.trim().toUpperCase() || ''; // Ambil company_id dari sesi dan konversi ke huruf besar
   const token = session?.accessToken || ''; // Ambil token dari sesi
 
-  console.log('Company ID:', company_id); // Debugging log
+  // console.log('Company ID:', company_id); // Debugging log
   console.log('Token from categoryPage:', token); // Debugging log
 
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
   const { data, total, isLoading, error } = useCategories(
     company_id,
     page,

@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     const fetchSession = async () => {
       const session = await getSession();
-      console.log('fetchedSession', session);
+      // console.log('fetchedSession', session);
 
       setSession(session);
     };

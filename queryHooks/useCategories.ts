@@ -26,12 +26,6 @@ export const useCategories = (
   >({
     queryKey: ['categories', company_id, page, limit],
     queryFn: () => {
-      // console.log('Fetching categories with:', {
-      //   company_id,
-      //   page,
-      //   limit,
-      //   token,
-      // }); // Debugging log
       return api
         .get<CategoriesResponse>('/categories', {
           params: { company_id, page, limit },
