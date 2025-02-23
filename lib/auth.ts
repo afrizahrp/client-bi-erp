@@ -1,102 +1,109 @@
-import { BACKEND_URL } from '@/lib/constants';
-import { NextAuthOptions } from 'next-auth';
-import { JWT } from 'next-auth/jwt';
-import Credentials from 'next-auth/providers/credentials';
-import NextAuth from 'next-auth/next';
-import CredentialsProvider from 'next-auth/providers/credentials';
+'use server';
 
-// import {User as UserType, user} from "@/app/api/user/data";
-// import GoogleProvider from "next-auth/providers/google";
-// import GithubProvider from "next-auth/providers/github";
+import { redirect } from 'next/navigation';
+import { BACKEND_URL } from './constants';
+import { FormState } from './type';
+import { createSession, updateTokens } from './session';
 
-import avatar3 from '@/public/images/avatar/avatar-3.jpg';
-
-async function refreshToken(token: JWT): Promise<JWT> {
-  const res = await fetch(BACKEND_URL + '/auth/refresh', {
+export async function signUp(
+  state: FormState,
+  formData: FormData
+): Promise<FormState> {
+  const response = await fetch(`${BACKEND_URL}/auth/signup`, {
     method: 'POST',
     headers: {
-      authorization: `Refresh ${token.refreshToken}`,
+      'Content-Type': 'application/json',
     },
+    body: JSON.stringify({
+      name: formData.get('name'),
+      email: formData.get('email'),
+      password: formData.get('password'),
+    }),
   });
-  console.log('refreshed');
 
-  const response = await res.json();
-
-  return {
-    ...token,
-    refreshToken: response.refreshToken,
-  };
+  if (response.ok) {
+    redirect('/auth/signin');
+  } else {
+    return {
+      message:
+        response.status === 409
+          ? 'The user is already existed!'
+          : response.statusText,
+    };
+  }
 }
 
-export const authOptions: NextAuthOptions = {
-  providers: [
-    CredentialsProvider({
-      name: 'Credentials',
-      credentials: {
-        name: {
-          label: 'Username',
-          type: 'text',
-          placeholder: 'jsmith',
-        },
-        password: { label: 'Password', type: 'password' },
-        // company_id: { label: 'Company ID', type: 'text' },
-      },
-      async authorize(credentials, req) {
-        console.log('Credentials:', credentials); // Tambahkan ini
-
-        if (
-          !credentials?.name ||
-          !credentials?.password
-          // ||!credentials?.company_id
-        )
-          return null;
-        const { name, password } = credentials;
-        const res = await fetch(BACKEND_URL + '/auth/login', {
-          method: 'POST',
-          body: JSON.stringify({
-            name,
-            password,
-          }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        if (res.status == 401) {
-          console.log(res.statusText);
-          return null;
-        }
-        const user = await res.json();
-        return user;
-      },
+export async function signIn(
+  name: string,
+  password: string
+): Promise<{ ok: boolean; error?: string }> {
+  const response = await fetch(`${BACKEND_URL}/auth/signin`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name,
+      password,
     }),
-  ],
+  });
 
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) return { ...token, ...user };
+  if (response.ok) {
+    const result = await response.json();
+    // Create The Session For Authenticated User.
 
-      if (new Date().getTime() < token.expiresIn) return token;
+    await createSession({
+      user: {
+        id: result.id,
+        name: result.name,
+        role_id: result.role_id,
+        company_id: result.company_id,
+        email: result.email,
+        image: result.image,
+      },
+      accessToken: result.accessToken,
+      refreshToken: result.refreshToken,
+    });
+    return { ok: true };
+  } else {
+    return {
+      ok: false,
+      error:
+        response.status === 401 ? 'Invalid Credentials!' : response.statusText,
+    };
+  }
+}
 
-      return await refreshToken(token);
-    },
+export const refreshToken = async (oldRefreshToken: string) => {
+  try {
+    const response = await fetch(`${BACKEND_URL}/auth/refresh`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        refresh: oldRefreshToken,
+      }),
+    });
 
-    async session({ token, session }) {
-      session.user = token.user;
-      session.accessToken = token.accessToken;
-      session.refreshToken = token.refreshToken;
-      // session.backendTokens = token.backendTokens;
+    if (!response.ok) {
+      throw new Error('Failed to refresh token' + response.statusText);
+    }
 
-      return session;
-    },
-  },
+    const { accessToken, refreshToken } = await response.json();
+    // update session with new tokens
+    const updateRes = await fetch('http://localhost:3000/api/auth/update', {
+      method: 'POST',
+      body: JSON.stringify({
+        accessToken,
+        refreshToken,
+      }),
+    });
+    if (!updateRes.ok) throw new Error('Failed to update the tokens');
 
-  pages: {
-    signIn: '/auth/login',
-    signOut: '/auth/logout',
-    error: '/auth/error',
-  },
+    return accessToken;
+  } catch (err) {
+    console.error('Refresh Token failed:', err);
+    return null;
+  }
 };
-
-const handler = NextAuth(authOptions);
-
-export { handler as GET, handler as POST };

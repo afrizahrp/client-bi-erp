@@ -2,12 +2,14 @@ import { useSidebar } from '@/store';
 import Image from 'next/image';
 import React from 'react';
 import { Pin } from 'lucide-react';
-import { useSession } from 'next-auth/react';
+// import { useSession } from 'next-auth/react';
+import { useAuth } from '@/provider/auth.provider';
 
 const SidebarLogo = ({ hovered }: { hovered?: boolean }) => {
   const { sidebarType, setCollapsed, collapsed } = useSidebar();
-  const { data: session } = useSession();
-  const companyId = session?.user?.company_id.trim();
+  // const { data: session } = useSession();
+  const { session } = useAuth();
+  const companyId = session?.user?.company_id;
 
   // Pemetaan companyId ke nama perusahaan
   let companyName = '';

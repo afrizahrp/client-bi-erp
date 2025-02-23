@@ -1,6 +1,8 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+// import { useSession } from 'next-auth/react';
+import { useAuth } from '@/provider/auth.provider';
+
 import { Card, CardContent } from '@/components/ui/card';
 import { CategoryListTable } from './category-list-table';
 import PageHeader from '@/components/page-header';
@@ -31,7 +33,9 @@ const pageHeader = {
 };
 
 const CategoryListPage = () => {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
+  const { session } = useAuth();
+
   const company_id = session?.user?.company_id?.trim().toUpperCase() || ''; // Ambil company_id dari sesi dan konversi ke huruf besar
 
   const [page, setPage] = useState(1);

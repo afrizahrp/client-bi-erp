@@ -11,7 +11,8 @@
 // import DatePickerWithRange from '@/components/date-picker-with-range';
 'use client';
 import React from 'react';
-import { useSession } from 'next-auth/react';
+// import { useSession } from 'next-auth/react';
+import { useAuth } from '@/provider/auth.provider';
 
 interface DashboardPageViewProps {
   trans: {
@@ -19,8 +20,9 @@ interface DashboardPageViewProps {
   };
 }
 const DashboardPageView = ({ trans }: DashboardPageViewProps) => {
-  const { data: session } = useSession();
-
+  // const { data: session } = useSession();
+  const { session } = useAuth();
+  console.log(session);
   const welcome = `Selamat datang ${session?.user?.name}`;
 
   return <div>{welcome}</div>;

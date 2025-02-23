@@ -1,5 +1,6 @@
 'use client';
-import { useSession, signOut } from 'next-auth/react';
+// import { useSession, signOut } from 'next-auth/react';
+import { useAuth } from '@/provider/auth.provider';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,7 +19,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const ProfileInfo = () => {
-  const { data: session } = useSession();
+  const { session } = useAuth();
 
   return (
     <DropdownMenu>
@@ -57,9 +58,9 @@ const ProfileInfo = () => {
             >
               {session?.user.email}
             </Link>
-            <div className='text-xs font-medium text-default-500 capitalize '>
+            {/* <div className='text-xs font-medium text-default-500 capitalize '>
               Signed in as {session?.user?.role_id ?? 'Role'}
-            </div>
+            </div> */}
           </div>
         </DropdownMenuLabel>
         {/* <DropdownMenuGroup>
@@ -173,7 +174,7 @@ const ProfileInfo = () => {
         </DropdownMenuGroup> */}
         <DropdownMenuSeparator className='mb-0 dark:bg-background' />
         <DropdownMenuItem
-          onSelect={() => signOut()}
+          // onSelect={() => signOut()}
           className='flex items-center gap-2 text-sm font-medium text-default-600 capitalize my-1 px-3 dark:hover:bg-background cursor-pointer'
         >
           <Icon icon='heroicons:power' className='w-4 h-4' />

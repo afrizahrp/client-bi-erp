@@ -12,7 +12,8 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { signIn } from 'next-auth/react';
+// import { signIn } from 'next-auth/react';
+import { signIn } from '@/lib/auth';
 import toast from 'react-hot-toast';
 import { Icon } from '@iconify/react';
 import { CardWrapper } from '@/components/auth/card-wrapper';
@@ -20,6 +21,7 @@ import CompanyCombobox from '../../../../../components/ui/company-combobox';
 import { LoginSchema } from '@/utils/schema/login.schema';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { redirect } from 'next/navigation';
+import { useFormState } from 'react-dom';
 
 const LogInForm = () => {
   const [isPending, startTransition] = React.useTransition();
@@ -36,32 +38,21 @@ const LogInForm = () => {
     resolver: zodResolver(LoginSchema),
     mode: 'all',
     defaultValues: {
-      name: 'afriza-bis',
+      name: 'afriza-1',
       password: '1234567',
       // company_id: '',
     },
   });
 
-  const onSubmit = (data: {
-    name: string;
-    password: string;
-    // company_id: string;
-  }) => {
+  const onSubmit = (data: { name: string; password: string }) => {
     startTransition(async () => {
-      let response = await signIn('credentials', {
-        name: data.name,
-        password: data.password,
-        // company_id: data.company_id.toLocaleUpperCase(),
-
-        redirect: false,
-      });
-      if (response?.ok) {
+      const response = await signIn(data.name, data.password);
+      if (response.ok) {
         toast.success('Login Successful');
-        // redirect('/dashboard');
         window.location.assign('/dashboard');
         form.reset();
-      } else if (response?.error) {
-        toast.error(response?.error);
+      } else if (response.error) {
+        toast.error(response.error);
       }
     });
   };
