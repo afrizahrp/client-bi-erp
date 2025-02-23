@@ -9,7 +9,7 @@ export async function signUp(
   state: FormState,
   formData: FormData
 ): Promise<FormState> {
-  const response = await fetch(`${BACKEND_URL}/auth/register`, {
+  const response = await fetch(`${BACKEND_URL}/auth/signup`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ export async function signUp(
   });
 
   if (response.ok) {
-    redirect('/auth/login');
+    redirect('/auth/signin');
   } else {
     return {
       message:
@@ -51,7 +51,6 @@ export async function signIn(
   if (response.ok) {
     const result = await response.json();
 
-    // console.log('Result:', result);
     // Create The Session For Authenticated User.
 
     await createSession({
@@ -63,8 +62,8 @@ export async function signIn(
         email: result.user.email,
         image: result.user.image,
       },
-      accessToken: result.user.accessToken,
-      refreshToken: result.user.refreshToken,
+      accessToken: result.accessToken,
+      refreshToken: result.refreshToken,
     });
     return { ok: true };
   } else {

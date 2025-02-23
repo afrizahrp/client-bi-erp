@@ -1,20 +1,29 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getSession } from '@/lib/session';
+'use client';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from 'react';
+import { getSession, Session } from '@/lib/session';
 
-const AuthContext = createContext(null);
-
-import { ReactNode } from 'react';
+const AuthContext = createContext<{ session: Session | null }>({
+  session: null,
+});
 
 interface AuthProviderProps {
   children: ReactNode;
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [session, setSession] = useState(null);
+  const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
     const fetchSession = async () => {
       const session = await getSession();
+      console.log('fetchedSession', session);
+
       setSession(session);
     };
 

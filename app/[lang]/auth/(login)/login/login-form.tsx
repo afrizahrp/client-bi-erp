@@ -41,11 +41,9 @@ const LogInForm = () => {
   });
 
   const onSubmit = (data: { name: string; password: string }) => {
-    console.log('Form data:', data); // Debugging log
     startTransition(async () => {
       try {
         const response = await signIn(data.name, data.password);
-        console.log('Response:', response); // Debugging log
         if (response.ok) {
           toast.success('Login Successful');
           window.location.assign('/dashboard');

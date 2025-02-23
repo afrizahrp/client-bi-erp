@@ -37,7 +37,8 @@ const CategoryListPage = () => {
   const company_id = session?.user?.company_id?.trim().toUpperCase() || ''; // Ambil company_id dari sesi dan konversi ke huruf besar
   const token = session?.accessToken || ''; // Ambil token dari sesi
 
-  console.log('token:', token);
+  console.log('Company ID:', company_id); // Debugging log
+  console.log('Token from categoryPage:', token); // Debugging log
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);

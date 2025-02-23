@@ -1,7 +1,6 @@
 'use server';
 
 import { jwtVerify, SignJWT } from 'jose';
-
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { Role } from './type';
@@ -23,7 +22,6 @@ const secretKey = process.env.SESSION_SECRET_KEY!;
 const encodedKey = new TextEncoder().encode(secretKey);
 
 export async function createSession(payload: Session) {
-  // console.log('creating session with payload', payload);
   const expiredAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
   const session = await new SignJWT(payload)
@@ -31,8 +29,6 @@ export async function createSession(payload: Session) {
     .setIssuedAt()
     .setExpirationTime('7d')
     .sign(encodedKey);
-
-  // console.log('Created JWT', session);
 
   cookies().set('session', session, {
     httpOnly: true,
@@ -51,8 +47,6 @@ export async function getSession() {
     const { payload } = await jwtVerify(cookie, encodedKey, {
       algorithms: ['HS256'],
     });
-
-    // console.log('verified session payload', payload);
 
     return payload as Session;
   } catch (err) {
@@ -86,6 +80,8 @@ export async function updateTokens({
     accessToken,
     refreshToken,
   };
+
+  // console.log('Updating session with new payload:', newPayload); // Debugging log
 
   await createSession(newPayload);
 }
