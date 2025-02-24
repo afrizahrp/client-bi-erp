@@ -58,7 +58,7 @@ export async function signIn(
         id: result.user.id,
         name: result.user.name,
         company_id: result.user.company_id,
-        role_id: result.user.role_id,
+        role_name: result.user.role_name,
         email: result.user.email,
         image: result.user.image,
       },

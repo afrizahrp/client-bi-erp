@@ -55,7 +55,7 @@ export const RegisterForm = () => {
             name: values.name,
             password: values.password,
             email: values.email,
-            role_id: 'GUEST',
+            role_id: 1,
             company_id: 'BIS',
           }),
           headers: {

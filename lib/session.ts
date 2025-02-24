@@ -10,7 +10,7 @@ export type Session = {
     id: string;
     name: string;
     company_id: string;
-    role_id: string;
+    role_name: string;
     email: string;
     image: string;
   };
