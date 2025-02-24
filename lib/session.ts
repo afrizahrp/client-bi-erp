@@ -9,10 +9,12 @@ export type Session = {
   user: {
     id: string;
     name: string;
-    company_id: string;
-    role_name: string;
     email: string;
     image: string;
+    company_id: string;
+    branch_id: string;
+    role_id: number;
+    role_name: string;
   };
   accessToken: string;
   refreshToken: string;

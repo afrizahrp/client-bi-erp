@@ -35,7 +35,8 @@ export async function signUp(
 
 export async function signIn(
   name: string,
-  password: string
+  password: string,
+  company_id: string
 ): Promise<{ ok: boolean; error?: string }> {
   const response = await fetch(`${BACKEND_URL}/auth/login`, {
     method: 'POST',
@@ -45,6 +46,7 @@ export async function signIn(
     body: JSON.stringify({
       name,
       password,
+      company_id,
     }),
   });
 
@@ -57,20 +59,26 @@ export async function signIn(
       user: {
         id: result.user.id,
         name: result.user.name,
-        company_id: result.user.company_id,
-        role_name: result.user.role_name,
         email: result.user.email,
         image: result.user.image,
+        company_id: result.user.company.company_id,
+        branch_id: result.user.company.branch_id,
+        role_id: result.user.company.role_id,
+        role_name: result.user.company.role_name,
       },
       accessToken: result.accessToken,
       refreshToken: result.refreshToken,
     });
     return { ok: true };
   } else {
+    const errorResult = await response.json();
+    // console.error('Error response from API:', errorResult); // Debugging log
+
+    // console.log('errorResult:', errorResult);
+    // toast.error(errorResult.message);
     return {
       ok: false,
-      error:
-        response.status === 401 ? 'Invalid Credentials!' : response.statusText,
+      error: errorResult.message || response.statusText,
     };
   }
 }

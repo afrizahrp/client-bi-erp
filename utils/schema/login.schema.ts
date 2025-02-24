@@ -63,9 +63,9 @@ export const LoginSchema = z.object({
   password: z.string().min(1, {
     message: 'Password is required',
   }),
-  // company_id: z.string().min(3, {
-  //   message: 'Company is required',
-  // }),
+  company_id: z.string().min(3, {
+    message: 'Company is required',
+  }),
   code: z.optional(z.string()),
 });
 

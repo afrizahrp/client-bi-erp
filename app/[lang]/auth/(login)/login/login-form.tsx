@@ -19,6 +19,7 @@ import { CardWrapper } from '@/components/auth/card-wrapper';
 import { LoginSchema } from '@/utils/schema/login.schema';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { useFormState } from 'react-dom';
+import CompanyCombobox from '@/components/ui/company-combobox';
 
 const LogInForm = () => {
   const [isPending, startTransition] = React.useTransition();
@@ -37,13 +38,22 @@ const LogInForm = () => {
     defaultValues: {
       name: 'afriza',
       password: '1234567',
+      company_id: '',
     },
   });
 
-  const onSubmit = (data: { name: string; password: string }) => {
+  const onSubmit = (data: {
+    name: string;
+    password: string;
+    company_id: string;
+  }) => {
     startTransition(async () => {
       try {
-        const response = await signIn(data.name, data.password);
+        const response = await signIn(
+          data.name,
+          data.password,
+          data.company_id.toLocaleUpperCase()
+        );
         if (response.ok) {
           toast.success('Login Successful');
           window.location.assign('/dashboard');
@@ -122,6 +132,24 @@ const LogInForm = () => {
                         )}
                       </div>
                     </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='company_id'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className='text-sm'>Company</FormLabel>
+                  <FormControl>
+                    <CompanyCombobox
+                      disabled={isPending}
+                      value={field.value}
+                      onChange={field.onChange}
+                      className='w-full'
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
