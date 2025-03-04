@@ -29,7 +29,7 @@ const MobileSidebar = ({
   const { collapsed } = useSidebar();
 
   const { session } = useAuth();
-  console.log('Session from sidebarLogo:', session); // Debugging log
+  // console.log('Session from sidebarLogo:', session); // Debugging log
   const companyId = session?.user?.company_id;
 
   // Pemetaan companyId ke nama perusahaan

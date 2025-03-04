@@ -9,7 +9,7 @@ const SidebarLogo = ({ hovered }: { hovered?: boolean }) => {
   const { sidebarType, setCollapsed, collapsed } = useSidebar();
   // const { data: session } = useSession();
   const { session } = useAuth();
-  console.log('Session from sidebarLogo:', session); // Debugging log
+  // console.log('Session from sidebarLogo:', session); // Debugging log
   const companyId = session?.user?.company_id;
 
   // Pemetaan companyId ke nama perusahaan
@@ -33,8 +33,8 @@ const SidebarLogo = ({ hovered }: { hovered?: boolean }) => {
           <Image
             src={logoSrc}
             alt='sidebar-logo'
-            width={80}
-            height={80}
+            width={100}
+            height={100}
             priority
           />
         </div>

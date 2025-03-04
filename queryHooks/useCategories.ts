@@ -17,8 +17,8 @@ interface CategoriesResponse {
 export const useCategories = (
   company_id: string,
   page: number,
-  limit: number,
-  token: string
+  limit: number
+  // token: string
 ) => {
   const { data, isLoading, error, ...rest } = useQuery<
     CategoriesResponse,
@@ -29,9 +29,9 @@ export const useCategories = (
       return api
         .get<CategoriesResponse>('/categories', {
           params: { company_id, page, limit },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          // headers: {
+          //   Authorization: `Bearer ${token}`,
+          // },
         })
         .then((res) => res.data);
     },
