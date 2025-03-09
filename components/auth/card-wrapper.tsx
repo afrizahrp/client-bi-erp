@@ -16,18 +16,26 @@ interface CardWrapperProps {
   backButtonHref: string;
   headerLabel: string;
   showSocial?: boolean;
+  companyLogo?: string;
+  companyName?: string;
 }
 
 export const CardWrapper = ({
   children,
   backButtonLabel,
   backButtonHref,
+  headerLabel,
+  companyLogo,
+  companyName,
   // showSocial
 }: CardWrapperProps) => {
   return (
     <Card className='w-[400px]  shadow-md'>
       <CardHeader>
-        <Header label='Bumi Indah Saranamedis' />
+        <Header
+          label={companyName || 'PT. BUMI INDAH SARANAMEDIS'}
+          companyLogo={companyLogo}
+        />
       </CardHeader>
       <CardContent>{children}</CardContent>
       {/* {showSocial && (

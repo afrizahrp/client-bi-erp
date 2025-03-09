@@ -1,45 +1,61 @@
-import { useQuery } from '@tanstack/react-query';
 import { api } from '@/config/axios.config';
+import { useQuery } from '@tanstack/react-query';
+import { useAuth } from '@/provider/auth.provider';
 
 interface Category {
   id: string;
   name: string;
   categoryType: string;
-  status: string;
+  iStatus: string;
+  imageURL: string;
   remarks?: string | null;
 }
 
 interface CategoriesResponse {
   data: Category[];
-  total: number;
+  totalRecords: number;
 }
 
 export const useCategories = (
   company_id: string,
   page: number,
   limit: number
-  // token: string
 ) => {
+  const { session } = useAuth();
+  const companyId = session?.user?.company_id;
+  const module = 'imc';
+
+  // Gabungkan baseURL dengan endpoint
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/${companyId}/${module}/categories`;
+
   const { data, isLoading, error, ...rest } = useQuery<
     CategoriesResponse,
     Error
   >({
     queryKey: ['categories', company_id, page, limit],
-    queryFn: () => {
-      return api
-        .get<CategoriesResponse>('/categories', {
-          params: { company_id, page, limit },
-          // headers: {
-          //   Authorization: `Bearer ${token}`,
-          // },
-        })
-        .then((res) => res.data);
+    queryFn: async () => {
+      try {
+        const response = await api.get<CategoriesResponse>(url, {
+          params: { page, limit },
+        });
+
+        console.log('Response from useCategories:', response.data); // Debugging log
+        return response.data; // Kembalikan data dari respons
+      } catch (error) {
+        throw new Error('Failed to fetch categories'); // Tangani error
+      }
     },
     staleTime: 60 * 1000, // 60s
     retry: 3,
   });
 
-  return { data: data?.data, total: data?.total, isLoading, error, ...rest };
+  return {
+    data: data?.data,
+    total: data?.totalRecords,
+    isLoading,
+    error,
+    ...rest,
+  };
 };
 
 export default useCategories;

@@ -102,7 +102,7 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
             <li key={`menu_key_${i}`}>
               {/* single menu  */}
 
-              {!item.child && !item.isHeader && (
+              {item && !item.child && !item.isHeader && (
                 <SingleMenuItem
                   item={item}
                   collapsed={collapsed}
@@ -117,7 +117,7 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
               )} */}
 
               {/* sub menu */}
-              {item.child && (
+              {item && item.child && (
                 <>
                   <SubMenuHandler
                     item={item}

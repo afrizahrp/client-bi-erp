@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Form,
@@ -18,13 +18,24 @@ import { Icon } from '@iconify/react';
 import { CardWrapper } from '@/components/auth/card-wrapper';
 import { LoginSchema } from '@/utils/schema/login.schema';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import { useFormState } from 'react-dom';
 import CompanyCombobox from '@/components/ui/company-combobox';
 
+interface Company {
+  value: string;
+  label: string;
+  image?: string;
+}
+
 const LogInForm = () => {
-  const [isPending, startTransition] = React.useTransition();
-  const [passwordType, setPasswordType] = React.useState('password');
+  const [isPending, startTransition] = useTransition();
+  const [passwordType, setPasswordType] = useState('password');
   const isDesktop2xl = useMediaQuery('(max-width: 1530px)');
+  const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
+
+  console.log('Selected Company:', selectedCompany);
+
+  const companyLogo = selectedCompany?.image;
+  const companyName = selectedCompany?.label;
 
   const togglePasswordType = () => {
     setPasswordType((prevType) =>
@@ -73,6 +84,8 @@ const LogInForm = () => {
       headerLabel='Login'
       backButtonLabel="Don't have an account ?"
       backButtonHref='/auth/register'
+      companyLogo={companyLogo}
+      companyName={companyName}
       showSocial
     >
       <Form {...form}>
@@ -148,6 +161,7 @@ const LogInForm = () => {
                       disabled={isPending}
                       value={field.value}
                       onChange={field.onChange}
+                      onSelect={(company) => setSelectedCompany(company)} // Simpan data perusahaan yang dipilih
                       className='w-full'
                     />
                   </FormControl>

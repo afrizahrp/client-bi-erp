@@ -8,13 +8,14 @@ export type CategoryColumns = {
   id: string;
   name: string;
   categoryType: string;
-  status: string;
+  iStatus: string;
   remarks: string;
   // images: string[];
 };
 
 export function getStatusColor(status: string) {
-  if (status.toLowerCase() === 'active') {
+  // if (status.toLowerCase() === 'active') {
+  if (status === 'ACTIVE') {
     return 'bg-green-600';
   } else {
     return 'bg-gray-400';
@@ -77,7 +78,7 @@ export const columns: ColumnDef<CategoryColumns>[] = [
     },
   },
   {
-    accessorKey: 'status',
+    accessorKey: 'iStatus',
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -86,7 +87,7 @@ export const columns: ColumnDef<CategoryColumns>[] = [
       />
     ),
     cell: ({ row }) => {
-      let value: string = row.getValue('status');
+      let value: string = row.getValue('iStatus');
       const color = getStatusColor(value);
       return (
         <div className='w-[140px]'>

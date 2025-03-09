@@ -14,7 +14,7 @@ interface CategoryColumns {
   id: string;
   name: string;
   categoryType: string;
-  status: string;
+  iStatus: string;
   remarks: string;
   // images: string[];
 }
@@ -84,7 +84,7 @@ const CategoryListPageContent: React.FC<CategoryListPageContentProps> = ({
           id: category.id.trim(),
           name: category.name.trim(),
           categoryType: category.categoryType,
-          status: category.status,
+          iStatus: category.iStatus,
           remarks: category.remarks?.trim() ?? '',
         }))
       );

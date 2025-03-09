@@ -8,15 +8,19 @@ const font = Poppins({
 
 interface HeaderProps {
   label: string;
+  companyLogo?: string;
 }
 
 import Image from 'next/image';
 
-export const Header: React.FC<HeaderProps> = ({ label }) => {
+export const Header: React.FC<HeaderProps> = ({
+  label,
+  companyLogo,
+}: HeaderProps) => {
   return (
     <div className='w-full flex flex-col items-center justify-center mb-0 mt-0'>
       <Image
-        src='/images/logo/logo.png'
+        src={companyLogo || '/images/logo/logo.png'}
         alt='logoAtlogin'
         width={80}
         height={80}
@@ -25,7 +29,7 @@ export const Header: React.FC<HeaderProps> = ({ label }) => {
       />
       <h1
         className={cn(
-          'text-md font-semibold text-blue-700 drop-shadow-md -mt-4',
+          'text-md font-semibold text-blue-700 drop-shadow-md -mt-2',
           font.className
         )}
       >

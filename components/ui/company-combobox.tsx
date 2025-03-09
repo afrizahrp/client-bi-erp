@@ -1,7 +1,7 @@
 'use client';
-import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { Check, ChevronsUpDown } from 'lucide-react';
-
+import { api } from '@/config/axios.config';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,26 +17,17 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
-const companies = [
-  {
-    value: 'bis',
-    label: 'Bumi Indah Saranamedis',
-  },
-  {
-    value: 'bip',
-    label: 'Bumi Indah Putra',
-  },
-  {
-    value: 'kbip',
-    label: 'Karoseri',
-  },
-];
-
+interface Company {
+  value: string;
+  label: string;
+  image?: string;
+}
 interface CompanyComboboxProps {
   className?: string;
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
+  onSelect?: (company: Company) => void; // Tambahkan prop onSelect
 }
 
 const CompanyCombobox: React.FC<CompanyComboboxProps> = ({
@@ -44,8 +35,28 @@ const CompanyCombobox: React.FC<CompanyComboboxProps> = ({
   value,
   onChange,
   disabled,
+  onSelect,
 }) => {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [companies, setCompanies] = useState<Company[]>([]);
+
+  useEffect(() => {
+    const fetchSysCompany = async () => {
+      try {
+        const response = await api.get('/sys_company');
+
+        const transformedData = response.data.map((item: any) => ({
+          value: item.id.toLowerCase(),
+          label: item.name,
+          image: item.image,
+        }));
+        setCompanies(transformedData);
+      } catch (error) {
+        console.error('Error fetching sys_company:', error);
+      }
+    };
+    fetchSysCompany();
+  }, []);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -72,11 +83,17 @@ const CompanyCombobox: React.FC<CompanyComboboxProps> = ({
                 key={company.value}
                 value={company.value}
                 disabled={disabled}
-                onSelect={(currentValue) => {
-                  onChange(currentValue === value ? '' : currentValue);
+                onSelect={() => {
+                  onChange(company.value); // Kirim value ke form
+                  onSelect?.(company); // Kirim seluruh data perusahaan ke parent component
                   setOpen(false);
                 }}
               >
+                {/* onSelect={(currentValue) => {
+                  onChange(currentValue === value ? '' : currentValue);
+                  setOpen(false);
+                }}
+              > */}
                 <Check
                   className={cn(
                     'mr-2 h-4 w-4',
