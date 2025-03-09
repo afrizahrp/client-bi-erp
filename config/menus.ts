@@ -36,6 +36,10 @@ export const menusConfig = {
                 href: '/inventory/subcategories/subcategory-list',
               },
               {
+                title: 'Unit of Measure',
+                href: '/inventory/uoms/uom-list',
+              },
+              {
                 title: 'Brands',
                 href: '/inventory/brands/brand-list',
               },
@@ -71,34 +75,6 @@ export const menusConfig = {
               },
             ],
           },
-          // {
-          //   title: 'Social Media',
-          //   href: '/cms/master',
-          //   multi_menu: [
-          //     {
-          //       title: 'Copywriting',
-          //       href: '#',
-          //     },
-          //     {
-          //       title: 'Content',
-          //       href: '#',
-          //     },
-          //   ],
-          // },
-          // {
-          //   title: 'Market Place',
-          //   href: '/cms/master',
-          //   multi_menu: [
-          //     {
-          //       title: 'Copywriting',
-          //       href: '#',
-          //     },
-          //     {
-          //       title: 'Content',
-          //       href: '#',
-          //     },
-          //   ],
-          // },
         ],
       },
     ],
