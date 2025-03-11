@@ -19,7 +19,8 @@ const SubMenuHandler = ({
   hovered: boolean;
   trans: any;
 }) => {
-  const { title } = item;
+  const { title, module_id } = item;
+  console.log('SubMenuHandler item:', item); // Tambahkan log ini
 
   return (
     <>

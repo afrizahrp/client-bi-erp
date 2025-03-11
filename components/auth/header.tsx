@@ -22,9 +22,10 @@ export const Header: React.FC<HeaderProps> = ({
       <Image
         src={companyLogo || '/images/logo/logo.png'}
         alt='logoAtlogin'
-        width={80}
-        height={80}
         style={{ top: 0, textAlign: 'left' }}
+        objectFit='contain'
+        width={100}
+        height={100}
         priority
       />
       <h1

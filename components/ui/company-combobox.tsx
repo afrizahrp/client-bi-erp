@@ -20,7 +20,7 @@ import {
 interface Company {
   value: string;
   label: string;
-  image?: string;
+  companyLogo?: string;
 }
 interface CompanyComboboxProps {
   className?: string;
@@ -48,7 +48,7 @@ const CompanyCombobox: React.FC<CompanyComboboxProps> = ({
         const transformedData = response.data.map((item: any) => ({
           value: item.id.toLowerCase(),
           label: item.name,
-          image: item.image,
+          companyLogo: item.companyLogo,
         }));
         setCompanies(transformedData);
       } catch (error) {

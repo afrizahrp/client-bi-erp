@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { cn, isLocationMatch, getDynamicPath } from '@/lib/utils';
 import { useSidebar, useThemeStore } from '@/store';
 import SidebarLogo from '../common/logo';
-import { menusConfig } from '@/config/menus';
+// import { menusConfig } from '@/config/menus';
 // import MenuLabel from '../common/menu-label';
 // import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -11,17 +11,23 @@ import { usePathname } from 'next/navigation';
 import SingleMenuItem from './single-menu-item';
 import SubMenuHandler from './sub-menu-handler';
 import NestedSubMenu from '../common/nested-menus';
+import { useGetMenu } from '@/hooks/use-get-menu'; // 🔥 Import hook yang sudah kamu buat
+
 // import AddBlock from '../common/add-block';
 const ClassicSidebar = ({ trans }: { trans: string }) => {
   const { sidebarBg } = useSidebar();
   const [activeSubmenu, setActiveSubmenu] = useState<number | null>(null);
   const [activeMultiMenu, setMultiMenu] = useState<number | null>(null);
-  const menus = menusConfig?.sidebarNav?.classic || [];
+  // const menus = menusConfig?.sidebarNav?.classic || [];
+  const { menuItems, loading } = useGetMenu(); // 🔥 Gunakan hook untuk fetch data menu
+
   const { collapsed, setCollapsed } = useSidebar();
   const { isRtl } = useThemeStore();
   const [hovered, setHovered] = useState<boolean>(false);
 
-  const toggleSubmenu = (i: number) => {
+  const toggleSubmenu = (i: number, module_id?: string) => {
+    console.log('Submenu clicked:', { index: i, module_id }); // Tambahkan log ini
+
     if (activeSubmenu === i) {
       setActiveSubmenu(null);
     } else {
@@ -43,7 +49,7 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
   React.useEffect(() => {
     let subMenuIndex = null;
     let multiMenuIndex = null;
-    menus?.map((item: any, i: number) => {
+    menuItems?.map((item: any, i: number) => {
       if (item?.child) {
         item.child.map((childItem: any, j: number) => {
           if (isLocationMatch(childItem.href, locationName)) {
@@ -63,6 +69,15 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
     setActiveSubmenu(subMenuIndex);
     setMultiMenu(multiMenuIndex);
   }, [locationName]);
+
+  // const handleMenuItemClick = (item: {
+  //   title: string;
+  //   href: string;
+  //   module_id?: number;
+  // }) => {
+  //   console.log('Menu item clicked:', item);
+  //   // Lakukan sesuatu dengan data item, seperti navigasi atau fetch data
+  // };
 
   return (
     <div
@@ -98,7 +113,7 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
             'text-start': collapsed && hovered,
           })}
         >
-          {menus.map((item, i) => (
+          {menuItems.map((item, i) => (
             <li key={`menu_key_${i}`}>
               {/* single menu  */}
 
@@ -121,7 +136,9 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
                 <>
                   <SubMenuHandler
                     item={item}
-                    toggleSubmenu={toggleSubmenu}
+                    toggleSubmenu={(index: number) =>
+                      toggleSubmenu(index, item.module_id)
+                    } // Panggil toggleSubmenu dengan module_id
                     index={i}
                     activeSubmenu={activeSubmenu}
                     collapsed={collapsed}
@@ -129,7 +146,7 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
                     trans={trans}
                   />
 
-                  {(!collapsed || hovered) && (
+                  {(!collapsed || hovered) && item.child.length > 0 && (
                     <NestedSubMenu
                       toggleMultiMenu={toggleMultiMenu}
                       activeMultiMenu={activeMultiMenu}
@@ -144,11 +161,6 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
             </li>
           ))}
         </ul>
-        {/* {!collapsed && (
-          <div className="-mx-2 ">
-            <AddBlock />
-          </div>
-        )} */}
       </ScrollArea>
     </div>
   );

@@ -23,7 +23,7 @@ import CompanyCombobox from '@/components/ui/company-combobox';
 interface Company {
   value: string;
   label: string;
-  image?: string;
+  companyLogo?: string;
 }
 
 const LogInForm = () => {
@@ -32,9 +32,9 @@ const LogInForm = () => {
   const isDesktop2xl = useMediaQuery('(max-width: 1530px)');
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
 
-  console.log('Selected Company:', selectedCompany);
+  // console.log('Selected Companyxx:', selectedCompany);
 
-  const companyLogo = selectedCompany?.image;
+  const companyLogo = selectedCompany?.companyLogo;
   const companyName = selectedCompany?.label;
 
   const togglePasswordType = () => {
@@ -82,7 +82,8 @@ const LogInForm = () => {
   return (
     <CardWrapper
       headerLabel='Login'
-      backButtonLabel="Don't have an account ?"
+      backButtonLabel=''
+      // backButtonLabel="Don't have an account ?"
       backButtonHref='/auth/register'
       companyLogo={companyLogo}
       companyName={companyName}

@@ -39,7 +39,7 @@ export const useCategories = (
           params: { page, limit },
         });
 
-        console.log('Response from useCategories:', response.data); // Debugging log
+        // console.log('Response from useCategories:', response.data); // Debugging log
         return response.data; // Kembalikan data dari respons
       } catch (error) {
         throw new Error('Failed to fetch categories'); // Tangani error
