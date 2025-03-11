@@ -21,8 +21,12 @@ const SubMenuHandler = ({
   trans: any;
 }) => {
   const { title, module_id } = item;
-  const setModule_id = useModuleStore((state) => state.setModuleId);
-  setModule_id && setModule_id(module_id);
+
+  const setModuleId = useModuleStore((state) => state.setModuleId); // Ambil setModuleId dari store
+
+  setModuleId(module_id); // Panggil setModuleId dengan module_id
+  // setModule_id && setModule_id(module_id);
+
   return (
     <>
       {!collapsed || hovered ? (

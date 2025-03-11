@@ -1,6 +1,7 @@
 import { api } from '@/config/axios.config';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/provider/auth.provider';
+import { useModuleStore } from '@/store';
 
 interface Category {
   id: string;
@@ -23,6 +24,9 @@ export const useCategories = (
 ) => {
   const { session } = useAuth();
   const companyId = session?.user?.company_id;
+  const module_id = useModuleStore((state) => state.moduleId);
+
+  console.log('Module ID from useCategories:', module_id); // Debugging log
   const module = 'imc';
 
   // Gabungkan baseURL dengan endpoint

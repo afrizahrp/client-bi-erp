@@ -7,7 +7,7 @@ export interface MenuItemProps {
   title: string;
   icon: any;
   href?: string;
-  module_id?: string;
+  module_id: string;
   child?: MenuItemProps[];
   multi_menu?: MenuItemProps[];
   nested?: MenuItemProps[];

@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { cn, isLocationMatch, getDynamicPath } from '@/lib/utils';
-import { useSidebar, useThemeStore } from '@/store';
+import { useModuleStore, useSidebar, useThemeStore } from '@/store';
 import SidebarLogo from '../common/logo';
 // import { menusConfig } from '@/config/menus';
 // import MenuLabel from '../common/menu-label';
@@ -25,9 +25,10 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
   const { isRtl } = useThemeStore();
   const [hovered, setHovered] = useState<boolean>(false);
 
-  const toggleSubmenu = (i: number, module_id?: string) => {
-    console.log('Submenu clicked:', { index: i, module_id }); // Tambahkan log ini
-
+  const toggleSubmenu = (i: number, module_id: string) => {
+    // console.log('Submenu clicked:', { index: i, module_id }); // Tambahkan log ini
+    const setModuleId = useModuleStore((state) => state.setModuleId);
+    setModuleId(module_id);
     if (activeSubmenu === i) {
       setActiveSubmenu(null);
     } else {
