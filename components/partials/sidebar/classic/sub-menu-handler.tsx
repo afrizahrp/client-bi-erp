@@ -1,6 +1,7 @@
 'use client';
 import { Icon } from '@iconify/react';
 import { cn, translate } from '@/lib/utils';
+import { useModuleStore } from '@/store';
 
 const SubMenuHandler = ({
   item,
@@ -20,8 +21,8 @@ const SubMenuHandler = ({
   trans: any;
 }) => {
   const { title, module_id } = item;
-  console.log('SubMenuHandler item:', item); // Tambahkan log ini
-
+  const setModule_id = useModuleStore((state) => state.setModuleId);
+  setModule_id && setModule_id(module_id);
   return (
     <>
       {!collapsed || hovered ? (
