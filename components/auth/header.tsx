@@ -23,7 +23,6 @@ export const Header: React.FC<HeaderProps> = ({
         src={companyLogo || '/images/logo/logo.png'}
         alt='logoAtlogin'
         style={{ top: 0, textAlign: 'left' }}
-        objectFit='contain'
         width={100}
         height={100}
         priority

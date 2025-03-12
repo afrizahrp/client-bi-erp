@@ -1,7 +1,7 @@
 'use client';
 import { Icon } from '@iconify/react';
 import { cn, translate } from '@/lib/utils';
-import { useModuleStore } from '@/store';
+// import { useModuleStore } from '@/store';
 
 const SubMenuHandler = ({
   item,
@@ -22,9 +22,9 @@ const SubMenuHandler = ({
 }) => {
   const { title, module_id } = item;
 
-  const setModuleId = useModuleStore((state) => state.setModuleId); // Ambil setModuleId dari store
+  // const setModuleId = useModuleStore((state) => state.setModuleId); // Ambil setModuleId dari store
 
-  setModuleId(module_id); // Panggil setModuleId dengan module_id
+  // setModuleId(module_id); // Panggil setModuleId dengan module_id
   // setModule_id && setModule_id(module_id);
 
   return (

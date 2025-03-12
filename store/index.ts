@@ -93,7 +93,12 @@ interface MenuModuleState {
   setModuleId: (id: string) => void;
 }
 
-export const useModuleStore = create<MenuModuleState>((set) => ({
-  moduleId: null,
-  setModuleId: (id: string) => set({ moduleId: id }),
-}));
+export const useModuleStore = create<MenuModuleState>()(
+  persist(
+    (set) => ({
+      moduleId: null,
+      setModuleId: (id: string) => set({ moduleId: id }),
+    }),
+    { name: 'module-store', storage: createJSONStorage(() => localStorage) }
+  )
+);

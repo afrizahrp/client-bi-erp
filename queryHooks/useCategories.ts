@@ -26,11 +26,10 @@ export const useCategories = (
   const companyId = session?.user?.company_id;
   const module_id = useModuleStore((state) => state.moduleId);
 
-  console.log('Module ID from useCategories:', module_id); // Debugging log
-  const module = 'imc';
-
   // Gabungkan baseURL dengan endpoint
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/${companyId}/${module}/categories`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/${companyId}/${module_id}/get-categories`;
+
+  console.log('URL from useCategories:', url); // Debugging log
 
   const { data, isLoading, error, ...rest } = useQuery<
     CategoriesResponse,
