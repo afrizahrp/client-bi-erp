@@ -9,8 +9,9 @@ export type CategoryColumns = {
   name: string;
   categoryType: string;
   iStatus: string;
-  remarks: string;
-  // images: string[];
+  remarks?: string;
+  imageURL: string;
+  slug: string | null;
 };
 
 export function getStatusColor(status: string) {

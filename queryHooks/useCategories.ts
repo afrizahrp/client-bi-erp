@@ -7,9 +7,10 @@ interface Category {
   id: string;
   name: string;
   categoryType: string;
+  slug: string | null;
   iStatus: string;
   imageURL: string;
-  remarks?: string | null;
+  remarks?: string;
 }
 
 interface CategoriesResponse {
@@ -26,12 +27,9 @@ export const useCategories = (
   const companyId = session?.user?.company_id;
   const module_id = useModuleStore((state) => state.moduleId);
 
-  // Gabungkan baseURL dengan endpoint
   const url = `${process.env.NEXT_PUBLIC_API_URL}/${companyId}/${module_id}/get-categories`;
 
-  console.log('URL from useCategories:', url); // Debugging log
-
-  const { data, isLoading, error, ...rest } = useQuery<
+  const { data, isLoading, error, isFetching, ...rest } = useQuery<
     CategoriesResponse,
     Error
   >({
@@ -42,7 +40,6 @@ export const useCategories = (
           params: { page, limit },
         });
 
-        // console.log('Response from useCategories:', response.data); // Debugging log
         return response.data; // Kembalikan data dari respons
       } catch (error) {
         throw new Error('Failed to fetch categories'); // Tangani error
@@ -56,6 +53,8 @@ export const useCategories = (
     data: data?.data,
     total: data?.totalRecords,
     isLoading,
+    isFetching, // Tambahkan untuk menampilkan loading hanya saat fetch baru
+
     error,
     ...rest,
   };
