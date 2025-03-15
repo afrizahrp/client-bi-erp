@@ -1,15 +1,13 @@
 'use client';
 
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import FormFooter from '@/components/form-footer';
 import SimpleMDE from 'react-simplemde-editor';
-import 'easymde/dist/easymde.min.css'; // Don't forget to import the CSS
+import 'easymde/dist/easymde.min.css';
 import { toast } from 'react-hot-toast';
-
-import { Billboards } from '@prisma/client';
 
 import { useParams, useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
@@ -23,13 +21,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 
-// import ImageCollection from '@/components/ui/images-collection';
 import BillboardVideoUpload from '@/components/ui/billboard-video-upload';
 import BillboardImageUpload from '@/components/ui/billboard-image-upload';
 
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
-
+import { Billboard } from '@/types';
 import {
   BillboardFormValues,
   billboardFormSchema,
@@ -39,7 +36,7 @@ import { InputGroup, InputGroupText } from '@/components/ui/input-group';
 import { Switch } from '@/components/ui/switch';
 
 interface BillboardFormProps {
-  initialBillboardData: Billboards | null;
+  initialBillboardData: Billboard | null; // Gunakan tipe Billboard
 }
 
 export const BillboardForm: React.FC<BillboardFormProps> = ({
@@ -61,23 +58,32 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
 
   const form = useForm<BillboardFormValues>({
     resolver: zodResolver(billboardFormSchema),
-    defaultValues: billboarddefaultValues(
-      initialBillboardData ?? {
-        section: 1,
-        title: '',
-        description: '',
-        isImage: true,
-        contentURL: '',
-        content_id: '',
-        isShowBtn: false,
-        btnText: '',
-        iStatus: true,
-        iShowedStatus: false,
-        remarks: '',
-      }
-    ),
+    defaultValues: initialBillboardData
+      ? {
+          ...initialBillboardData,
+          title: initialBillboardData.title ?? '',
+          name: initialBillboardData.name ?? '',
+          isImage: initialBillboardData.isImage ?? true,
+          contentURL: initialBillboardData.contentURL ?? '',
+          content_id: initialBillboardData.content_id ?? '',
+          iStatus: initialBillboardData.iStatus ?? '',
+          iShowedStatus: initialBillboardData.iShowedStatus ?? '',
+          remarks: initialBillboardData.remarks ?? '',
+          contentType: initialBillboardData.contentType ?? '',
+        }
+      : {
+          section: 1,
+          title: '',
+          name: '',
+          isImage: true,
+          contentURL: '',
+          content_id: '',
+          iStatus: 'Active',
+          iShowedStatus: 'SHOW',
+          remarks: '',
+          contentType: '',
+        },
   });
-
   const handleBack = (e: any) => {
     e.preventDefault();
     setLoading(false);
@@ -88,7 +94,6 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     try {
       setLoading(true);
       if (initialBillboardData) {
-        // await axios.patch(`/api/cms/billboarContents/${params.id}`, data);
         await axios.patch(`/api/cms/billboards/${params?.id}`, data);
       } else {
         await axios.post(`/api/cms/billboards`, data);
@@ -109,8 +114,6 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     try {
       setLoading(true);
 
-      // const contentId = extractPublicIdFromCloudinaryUrl(id);
-
       await axios.delete(`/api/cms/billboards/${id}`);
 
       router.refresh();
@@ -129,16 +132,14 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     ? BillboardImageUpload
     : BillboardVideoUpload;
 
-  const billboard_id = initialBillboardData?.id ?? '';
+  const billboard_id = initialBillboardData?.id.toString();
   return (
     <>
-      {/* <div className='w-full flex flex-col gap-6 drop-shadow-md justify-center px-4'> */}
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className='space-y-8 w-full'
         >
-          {/* <div className='w-[1200px] h-[675px] flex items-center justify-center'> */}
           <div className='w-full flex items-center justify-center'>
             <FormField
               control={form.control}
@@ -151,7 +152,9 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                       disabled={loading}
                       onChange={(url) => field.onChange(url)}
                       onRemove={(contentURL) => {
-                        handleImageRemove(billboard_id);
+                        if (billboard_id) {
+                          handleImageRemove(billboard_id);
+                        }
                         const newValue = Array.isArray(field.value)
                           ? field.value.filter(
                               (value: { contentURL: string }) =>
@@ -211,25 +214,6 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
           </div>
 
           <div className='grid grid-cols-12 gap-4 py-2'>
-            {/* <div className='col-span-2'>
-              <FormField
-                control={form.control}
-                name='id'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Id</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='Id'
-                        value={field.value ?? ''}
-                        onChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div> */}
-
             <div className='col-span-1'>
               <FormField
                 control={form.control}
@@ -282,7 +266,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
           <div>
             <FormField
               control={form.control}
-              name='description'
+              name='name'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Description</FormLabel>
@@ -296,53 +280,53 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                 </FormItem>
               )}
             />
-
-            <FormField
-              control={form.control}
-              name='iStatus'
-              render={({ field }) => (
-                <FormItem
-                  className={`flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 justify-self-end ${
-                    field.value
-                      ? 'bg-green-600 text-white'
-                      : 'bg-slate-400 text-black'
-                  }`}
-                >
-                  <FormControl>
-                    <Switch
-                      checked={!!field.value}
-                      // @ts-ignore
-                      onCheckedChange={field.onChange}
-                      // disabled={loading}
-                      style={{
-                        backgroundColor: field.value ? 'green' : 'gray',
-                      }}
-                    />
-                  </FormControl>
-                  <div className='space-y-1 leading-none'>
-                    <FormLabel>
-                      {field.value ? (
-                        <span className='text-red text-semibold'>Active</span>
-                      ) : (
-                        <span className='text-green'>Non Active</span>
-                      )}{' '}
-                    </FormLabel>
-                    <FormDescription>
-                      {field.value ? (
-                        <span className='text-white'>
-                          This billboard will be shown in the website
-                        </span>
-                      ) : (
-                        <span className='text-black'>
-                          This billboard will not be shown in the website
-                        </span>
-                      )}
-                    </FormDescription>
-                  </div>
-                </FormItem>
-              )}
-            />
-
+          </div>
+          <FormField
+            control={form.control}
+            name='iStatus'
+            render={({ field }) => (
+              <FormItem
+                className={`flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 justify-self-end ${
+                  field.value
+                    ? 'bg-green-600 text-white'
+                    : 'bg-slate-400 text-black'
+                }`}
+              >
+                <FormControl>
+                  <Switch
+                    checked={!!field.value}
+                    // @ts-ignore
+                    onCheckedChange={field.onChange}
+                    // disabled={loading}
+                    style={{
+                      backgroundColor: field.value ? 'green' : 'gray',
+                    }}
+                  />
+                </FormControl>
+                <div className='space-y-1 leading-none'>
+                  <FormLabel>
+                    {field.value ? (
+                      <span className='text-red text-semibold'>Active</span>
+                    ) : (
+                      <span className='text-green'>Non Active</span>
+                    )}{' '}
+                  </FormLabel>
+                  <FormDescription>
+                    {field.value ? (
+                      <span className='text-white'>
+                        This billboard will be shown in the website
+                      </span>
+                    ) : (
+                      <span className='text-black'>
+                        This billboard will not be shown in the website
+                      </span>
+                    )}
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+          <div>
             <FormField
               control={form.control}
               name='iShowedStatus'
@@ -393,26 +377,14 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
               )}
             />
           </div>
-
-          <FormFooter
-            isLoading={loading}
-            handleAltBtn={handleBack}
-            submitBtnText={id ? 'Update' : 'Save'}
-          />
+          {/* <FormFooter
+            handleBack={handleBack}
+            loading={loading}
+            form={form}
+            id={id}
+          /> */}
         </form>
       </Form>
-      {/* </div> */}
     </>
   );
 };
-function extractPublicIdFromCloudinaryUrl(imageURL: string): string | null {
-  const parts = imageURL.split('/');
-  const fileName = parts.pop(); // Gets "myimage.jpg"
-  if (typeof fileName === 'string') {
-    const id = fileName.split('.')[0];
-    return id; // Return the extracted id
-  } else {
-    console.error('fileName is not a string');
-    return null; // Return null or handle the error as needed
-  }
-}

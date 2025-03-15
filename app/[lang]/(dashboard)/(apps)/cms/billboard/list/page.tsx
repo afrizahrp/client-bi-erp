@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { BillboardListTable } from './list-table/components';
 import { BillboardColumn } from './list-table/components/columns';
 import { Card, CardContent } from '@/components/ui/card';
-import useBillboard from '@/queryHooks/useBillboard';
+import useGetAllBillboard from '@/queryHooks/useGetAllBillboard';
 import PageHeader from '@/components/page-header';
 import { routes } from '@/config/routes';
 import LayoutLoader from '@/components/layout-loader';
@@ -25,7 +25,7 @@ const BillboardListPage = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
 
-  const { data, total, isFetching, error } = useBillboard(page, limit);
+  const { data, total, isFetching, error } = useGetAllBillboard(page, limit);
 
   if (isFetching && !data) {
     return (
@@ -41,7 +41,7 @@ const BillboardListPage = () => {
 
   const formattedBillboard: BillboardColumn[] =
     data?.map((item) => ({
-      id: item.id,
+      id: item.id.toString() || '0',
       section: item.section.toString() || '0',
       description: item.name ?? '',
       title: item.title ?? '',

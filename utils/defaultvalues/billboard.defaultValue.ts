@@ -6,14 +6,13 @@ export function billboarddefaultValues(
   return {
     section: initialBillboardData?.section ?? 0,
     title: initialBillboardData?.title ?? '',
-    description: initialBillboardData?.description ?? '',
+    name: initialBillboardData?.name ?? '',
     isImage: initialBillboardData?.isImage ?? true,
     contentURL: initialBillboardData?.contentURL ?? '',
     content_id: initialBillboardData?.content_id ?? '',
-    btnText: initialBillboardData?.btnText ?? '',
-    iStatus: initialBillboardData!.iStatus ?? true,
-    iShowedStatus: initialBillboardData!.iShowedStatus ?? false,
-    isShowBtn: initialBillboardData?.isShowBtn ?? false,
+    iStatus: initialBillboardData!.iStatus ?? 'Active',
+    iShowedStatus: initialBillboardData!.iShowedStatus ?? 'SHOW',
     remarks: initialBillboardData?.remarks ?? '',
+    contentType: initialBillboardData?.contentType ?? '',
   };
 }

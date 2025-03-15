@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { CategoryListTable } from './list-table';
-
 import LayoutLoader from '@/components/layout-loader';
 import { routes } from '@/config/routes';
 import PageHeader from '@/components/page-header';
@@ -11,7 +10,7 @@ import { CategoryColumns } from './list-table/components/columns';
 
 const CategoryListPage = () => {
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(20);
   const { data, total, isFetching, error } = useCategory(page, limit);
 
   if (isFetching && !data) {

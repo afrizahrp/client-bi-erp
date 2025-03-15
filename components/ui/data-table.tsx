@@ -121,6 +121,7 @@ export function DataTable<TData, TValue>({
               value={`${limit}`}
               onValueChange={(value) => {
                 setLimit(Number(value));
+                table.setPageSize(Number(value)); // Terapkan ke react-table
               }}
             >
               <SelectTrigger className='h-8 w-[70px]'>

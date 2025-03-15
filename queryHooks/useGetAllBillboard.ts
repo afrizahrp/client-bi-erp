@@ -4,7 +4,7 @@ import { useAuth } from '@/provider/auth.provider';
 import { useModuleStore } from '@/store';
 
 interface Billboard {
-  id: number;
+  id: string;
   section: number;
   content_id: string;
   title: string;
@@ -22,7 +22,7 @@ interface BillboardResponse {
   totalRecords: number;
 }
 
-export const useBillboard = (page: number, limit: number) => {
+export const useGetAllBillboard = (page: number, limit: number) => {
   const { session } = useAuth();
   const company_id = session?.user?.company_id;
   const module_id = useModuleStore((state) => state.moduleId);
@@ -36,8 +36,6 @@ export const useBillboard = (page: number, limit: number) => {
     queryKey: ['billboards', company_id, page, limit],
     queryFn: async () => {
       try {
-        console.log('Fetching data from URL:', url); // Debugging log
-        console.log('Page:', page, 'Limit:', limit); // Debugging log
         const response = await api.get<BillboardResponse>(url);
 
         console.log('Response data:', response.data); // Debugging log
@@ -62,4 +60,4 @@ export const useBillboard = (page: number, limit: number) => {
   };
 };
 
-export default useBillboard;
+export default useGetAllBillboard;

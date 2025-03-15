@@ -9,7 +9,7 @@ export const routes = {
     createCategory: '/ecommerce/categories/create',
     editCategory: (id: string) => `/ecommerce/categories/${id}/edit`,
     orders: '/ecommerce/orders',
-    createOrder: '/ecommerce/orders/create'
+    createOrder: '/ecommerce/orders/create',
   },
   inventory: {
     dashboard: '/inventory',
@@ -24,14 +24,14 @@ export const routes = {
     newSubCategory: '/inventory/subcategories/new',
     newBrand: '/inventory/brands/new',
     productDetails: (slug: string) => `/inventory/products/${slug}`,
-    ediProduct: (slug: string) => `/inventory/products/${slug}/edit`
+    ediProduct: (slug: string) => `/inventory/products/${slug}/edit`,
   },
   production: {
     dashboard: '/production',
     finishgoods: '/production/finishgoods/finishgoods-list',
     materials: '/production/materials/material-list',
     newfinishgoods: '/production/finishgoods/new',
-    editfinishgoods: (id: string) => `/production/finishgoods/${id}`
+    editfinishgoods: (id: string) => `/production/finishgoods/${id}`,
   },
   cms: {
     products: '/cms/products/product-list',
@@ -39,19 +39,19 @@ export const routes = {
     newBillboard: '/cms/billboards/new',
     pricelist: '/cms/pricelist/pricelist-list',
     newPricelist: `/cms/pricelist/${''}`,
-    editBillboardCms: (id: string) => `/cms/billboards/${id}`
+    editBillboardCms: (id: string) => `/cms/billboard/${id}`,
   },
   settings: {
     home: '/settings',
     userrole: '/settings/user-role/role-list',
     newUserRole: '/settings/user-role/new',
-    editUserRole: (id: string) => `/settings/userrole/${id}`
+    editUserRole: (id: string) => `/settings/userrole/${id}`,
   },
 
   searchAndFilter: {
     realEstate: '/search/real-estate',
     nft: '/search/nft',
-    flight: '/search/flight'
+    flight: '/search/flight',
   },
   support: {
     dashboard: '/support',
@@ -65,7 +65,7 @@ export const routes = {
     templates: '/support/templates',
     createTemplate: '/support/templates/create',
     viewTemplate: (id: string) => `/support/templates/${id}`,
-    editTemplate: (id: string) => `/support/templates/${id}/edit`
+    editTemplate: (id: string) => `/support/templates/${id}/edit`,
   },
   logistics: {
     dashboard: '/logistics',
@@ -74,31 +74,31 @@ export const routes = {
     createShipment: '/logistics/shipments/create',
     editShipment: (id: string) => `/logistics/shipments/${id}/edit`,
     shipmentDetails: (id: string) => `/logistics/shipments/${id}`,
-    tracking: (id: string) => `/logistics/tracking/${id}`
+    tracking: (id: string) => `/logistics/tracking/${id}`,
   },
   appointment: {
     dashboard: '/appointment',
-    appointmentList: '/appointment/list'
+    appointmentList: '/appointment/list',
   },
   executive: {
-    dashboard: '/executive'
+    dashboard: '/executive',
   },
   jobBoard: {
     dashboard: '/job-board',
-    jobFeed: '/job-board/feed'
+    jobFeed: '/job-board/feed',
   },
   analytics: '/analytics',
   financial: {
-    dashboard: '/financial'
+    dashboard: '/financial',
   },
   file: {
     dashboard: '/file',
     manager: '/file-manager',
     upload: '/file-manager/upload',
-    create: '/file-manager/create'
+    create: '/file-manager/create',
   },
   pos: {
-    index: '/point-of-sale'
+    index: '/point-of-sale',
   },
   eventCalendar: '/event-calendar',
   rolesPermissions: '/roles-permissions',
@@ -107,14 +107,14 @@ export const routes = {
     create: '/invoice/create',
     details: (id: string) => `/invoice/${id}`,
     edit: (id: string) => `/invoice/${id}/edit`,
-    builder: '/invoice/builder'
+    builder: '/invoice/builder',
   },
   widgets: {
     cards: '/widgets/cards',
     icons: '/widgets/icons',
     charts: '/widgets/charts',
     maps: '/widgets/maps',
-    banners: '/widgets/banners'
+    banners: '/widgets/banners',
   },
   tables: {
     basic: '/tables/basic',
@@ -128,14 +128,14 @@ export const routes = {
     tanTableDnD: '/tables/tan-table-dnd',
     tanTablePinning: '/tables/tan-table-pinning',
     tanTableEnhanced: '/tables/tan-table-enhanced',
-    tanTableCollapsible: '/tables/tan-table-collapsible'
+    tanTableCollapsible: '/tables/tan-table-collapsible',
   },
   multiStep: '/multi-step',
   forms: {
     profileSettings: '/forms/profile-settings',
     notificationPreference: '/forms/profile-settings/notification',
     personalInformation: '/forms/profile-settings/profile',
-    newsletter: '/forms/newsletter'
+    newsletter: '/forms/newsletter',
   },
   emailTemplates: '/email-templates',
   profile: '/profile',
@@ -168,7 +168,7 @@ export const routes = {
     otp2: '/auth/otp-2',
     otp3: '/auth/otp-3',
     otp4: '/auth/otp-4',
-    otp5: '/auth/otp-5'
+    otp5: '/auth/otp-5',
   },
-  signIn: '/signin'
-}
+  signIn: '/signin',
+};

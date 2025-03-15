@@ -10,7 +10,7 @@ import { CategoryColumns } from './list-table/components/columns';
 
 const CategoryListPage = () => {
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(20);
   const { data, total, isFetching, error } = useCategory(page, limit);
 
   if (isFetching && !data) {

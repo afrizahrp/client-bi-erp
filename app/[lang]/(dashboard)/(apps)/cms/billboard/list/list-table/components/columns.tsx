@@ -10,7 +10,7 @@ import NextImage from 'next/image';
 import { Video } from 'cloudinary-react';
 
 export type BillboardColumn = {
-  id: number;
+  id: string;
   section: string;
   description: string;
   title: string;
