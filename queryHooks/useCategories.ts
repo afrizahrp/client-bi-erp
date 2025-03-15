@@ -11,6 +11,7 @@ interface Category {
   iStatus: string;
   imageURL: string;
   remarks?: string;
+  iShowedStatus: string;
 }
 
 interface CategoriesResponse {
@@ -33,7 +34,7 @@ export const useCategories = (
     CategoriesResponse,
     Error
   >({
-    queryKey: ['categories', company_id, page, limit],
+    queryKey: ['categories', company_id, module_id, page, limit],
     queryFn: async () => {
       try {
         const response = await api.get<CategoriesResponse>(url, {
@@ -47,6 +48,7 @@ export const useCategories = (
     },
     staleTime: 60 * 1000, // 60s
     retry: 3,
+    keepPreviousData: true,
   });
 
   return {
