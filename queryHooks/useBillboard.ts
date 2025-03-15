@@ -19,22 +19,25 @@ interface Billboard {
 
 interface BillboardResponse {
   data: Billboard[];
+  totalRecords: number;
 }
 
-export const useBillboard = () => {
+export const useBillboard = (page: number, limit: number) => {
   const { session } = useAuth();
-  const companyId = session?.user?.company_id;
+  const company_id = session?.user?.company_id;
   const module_id = useModuleStore((state) => state.moduleId);
 
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/${companyId}/${module_id}/billboards/all`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/${company_id}/${module_id}/billboards/all`;
 
   const { data, isLoading, error, isFetching, ...rest } = useQuery<
     BillboardResponse,
     Error
   >({
-    queryKey: ['billboards'],
+    queryKey: ['billboards', company_id, page, limit],
     queryFn: async () => {
       try {
+        console.log('Fetching data from URL:', url); // Debugging log
+        console.log('Page:', page, 'Limit:', limit); // Debugging log
         const response = await api.get<BillboardResponse>(url);
 
         console.log('Response data:', response.data); // Debugging log
@@ -51,6 +54,7 @@ export const useBillboard = () => {
 
   return {
     data: data?.data,
+    total: data?.totalRecords,
     isLoading,
     isFetching, // Tambahkan untuk menampilkan loading hanya saat fetch baru
     error,

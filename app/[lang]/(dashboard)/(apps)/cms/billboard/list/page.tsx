@@ -1,11 +1,12 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { BillboardListTable } from './list-table/components';
 import { BillboardColumn } from './list-table/components/columns';
 import { Card, CardContent } from '@/components/ui/card';
 import useBillboard from '@/queryHooks/useBillboard';
 import PageHeader from '@/components/page-header';
 import { routes } from '@/config/routes';
+import LayoutLoader from '@/components/layout-loader';
 
 const pageHeader = {
   title: 'Billboard List',
@@ -21,17 +22,22 @@ const pageHeader = {
 };
 
 const BillboardListPage = () => {
-  const { data, isFetching, error } = useBillboard();
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+
+  const { data, total, isFetching, error } = useBillboard(page, limit);
 
   if (isFetching && !data) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <LayoutLoader />
+      </div>
+    );
   }
 
   if (error) {
     return <div>Error fetching billboards: {error.message}</div>;
   }
-
-  console.log('Billboard data:', data); // Debugging log
 
   const formattedBillboard: BillboardColumn[] =
     data?.map((item) => ({
@@ -52,7 +58,15 @@ const BillboardListPage = () => {
       <div>
         <Card className='mt-6'>
           <CardContent className='p-10'>
-            <BillboardListTable data={formattedBillboard} />
+            <BillboardListTable
+              data={formattedBillboard}
+              currentPage={page}
+              totalPages={Math.ceil((total ?? 0) / limit)}
+              totalRecords={total ?? 0}
+              onPageChange={setPage}
+              limit={limit}
+              setLimit={setLimit}
+            />
           </CardContent>
         </Card>
       </div>
