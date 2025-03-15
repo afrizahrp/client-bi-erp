@@ -11,6 +11,8 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^40.1.0",
     "@ckeditor/ckeditor5-react": "^6.2.0",
+    "cloudinary": "^2.2.0",
+    "cloudinary-react": "^1.8.1",
     "@dnd-kit/core": "^6.0.8",
     "@dnd-kit/sortable": "^7.0.2",
     "@dnd-kit/utilities": "^3.2.2",

@@ -14,30 +14,26 @@ interface Category {
   iShowedStatus: string;
 }
 
-interface CategoriesResponse {
+interface CategoryResponse {
   data: Category[];
   totalRecords: number;
 }
 
-export const useCategories = (
-  company_id: string,
-  page: number,
-  limit: number
-) => {
+export const useCategory = (page: number, limit: number) => {
   const { session } = useAuth();
-  const companyId = session?.user?.company_id;
+  const company_id = session?.user?.company_id;
   const module_id = useModuleStore((state) => state.moduleId);
 
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/${companyId}/${module_id}/get-categories`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/${company_id}/${module_id}/get-categories`;
 
   const { data, isLoading, error, isFetching, ...rest } = useQuery<
-    CategoriesResponse,
+    CategoryResponse,
     Error
   >({
     queryKey: ['categories', company_id, module_id, page, limit],
     queryFn: async () => {
       try {
-        const response = await api.get<CategoriesResponse>(url, {
+        const response = await api.get<CategoryResponse>(url, {
           params: { page, limit },
         });
 
@@ -62,4 +58,4 @@ export const useCategories = (
   };
 };
 
-export default useCategories;
+export default useCategory;

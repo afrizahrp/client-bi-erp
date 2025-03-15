@@ -2,9 +2,9 @@
 import { cn } from '@/lib/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataTableColumnHeader } from '@/components/ui/data-table-column-header';
-import NextImage from 'next/image';
+import { getStatusColor } from '@/utils/statusUils';
+
 import Link from 'next/link';
-import { EyeOff, Eye } from 'lucide-react';
 
 export type CategoryColumns = {
   id: string;
@@ -14,26 +14,16 @@ export type CategoryColumns = {
   remarks?: string;
   imageURL: string;
   slug: string | null;
-  iShowedStatus: string;
 };
 
-export function getStatusColor(status: string) {
-  // if (status.toLowerCase() === 'active') {
-  if (status === 'ACTIVE') {
-    return 'bg-green-600';
-  } else {
-    return 'bg-gray-400';
-  }
-}
-
-export function getDisplayStatus(showedStatus: string): string {
-  if (showedStatus === 'SHOW') {
-    return 'Shown';
-  } else {
-    return 'Hidden';
-  }
-}
-
+// export function getStatusColor(status: string) {
+//   // if (status.toLowerCase() === 'active') {
+//   if (status === 'ACTIVE') {
+//     return 'bg-green-600';
+//   } else {
+//     return 'bg-gray-400';
+//   }
+// }
 export const columns: ColumnDef<CategoryColumns>[] = [
   // {
   //   id: 'actions',
@@ -111,56 +101,6 @@ export const columns: ColumnDef<CategoryColumns>[] = [
             )}
           ></span>
           {value}
-        </div>
-      );
-    },
-    filterFn: (row, id, value: string) => {
-      return value.includes(row.getValue(id));
-    },
-  },
-  {
-    accessorKey: 'imageURL',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Images' />
-    ),
-    cell: ({ row }) => {
-      const imageURL = row.getValue('imageURL') as string;
-
-      return (
-        <div className='flex space-x-1'>
-          {imageURL && (
-            <NextImage
-              src={imageURL}
-              width={60}
-              height={80}
-              alt='Image'
-              className='max-w-[80px] object-cover'
-            />
-          )}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: 'iShowedStatus',
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title='Visibility'
-        className='text-black dark:text-slate-300'
-      />
-    ),
-    cell: ({ row }) => {
-      let value: string = row.getValue('iShowedStatus') as string;
-      const displayStatus = getDisplayStatus(value);
-      const isDisplayed = displayStatus === 'Shown';
-      return (
-        <div className='w-[40px]'>
-          {isDisplayed ? (
-            <Eye className='mr-2 text-green-500' />
-          ) : (
-            <EyeOff className='mr-2 text-gray-500' />
-          )}
         </div>
       );
     },

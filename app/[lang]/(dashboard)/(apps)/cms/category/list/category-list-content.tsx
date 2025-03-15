@@ -1,10 +1,10 @@
 'use client';
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { CategoryListTable } from './category-list-table';
+import { CategoryListTable } from './list-table';
 import PageHeader from '@/components/page-header';
 import { routes } from '@/config/routes';
-import useCategories from '@/queryHooks/useCategories';
+import useCategory from '@/queryHooks/useCategory';
 import LayoutLoader from '@/components/layout-loader';
 
 interface CategoryColumns {
@@ -35,7 +35,7 @@ const CategoryListContent: React.FC<CategoryListContentProps> = ({
 }) => {
   const company_id = session?.user?.company_id?.trim().toUpperCase() || '';
 
-  const { data, total, isFetching, error } = useCategories(
+  const { data, total, isFetching, error } = useCategory(
     company_id,
     page,
     limit
