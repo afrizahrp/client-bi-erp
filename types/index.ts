@@ -1,15 +1,26 @@
+export type Category = {
+  id: string;
+  name: string;
+  categoryType: string;
+  slug: string | null;
+  iStatus: string;
+  imageURL: string;
+  remarks?: string;
+  iShowedStatus: string;
+};
+
 export type Billboard = {
   id: number;
+  name: string;
   section: number;
-  content_id: string;
-  title?: string;
-  name?: string;
-  isImage?: boolean;
+  title: string;
   contentURL: string;
-  contentType?: string;
+  content_id: number;
+  isImage: boolean;
+  contentType: string;
   iStatus: string;
   iShowedStatus: string;
-  remarks?: string;
+  remarks: string;
 };
 
 export interface Products {
@@ -56,17 +67,6 @@ export interface ProductImages {
 export interface CategoryTypes {
   id?: string | null;
   name?: string | null;
-}
-
-export interface Categories {
-  type: string;
-  id: string;
-  name?: string | null;
-  remarks?: string | null;
-  iStatus?: boolean;
-  iShowedStatus?: boolean;
-  images: CategoryImages[];
-  showStatus: boolean;
 }
 
 export interface CategoryImages {

@@ -41,7 +41,7 @@ const BillboardListPage = () => {
 
   const formattedBillboard: BillboardColumn[] =
     data?.map((item) => ({
-      id: item.id.toString() || '0',
+      id: item.id,
       section: item.section.toString() || '0',
       description: item.name ?? '',
       title: item.title ?? '',

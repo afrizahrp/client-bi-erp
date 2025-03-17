@@ -67,15 +67,6 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
     setMultiMenu(multiMenuIndex);
   }, [locationName]);
 
-  // const handleMenuItemClick = (item: {
-  //   title: string;
-  //   href: string;
-  //   module_id?: number;
-  // }) => {
-  //   console.log('Menu item clicked:', item);
-  //   // Lakukan sesuatu dengan data item, seperti navigasi atau fetch data
-  // };
-
   return (
     <div
       onMouseEnter={() => setHovered(true)}

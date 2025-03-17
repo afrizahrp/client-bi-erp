@@ -2,17 +2,7 @@ import { api } from '@/config/axios.config';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/provider/auth.provider';
 import { useModuleStore } from '@/store';
-
-interface Category {
-  id: string;
-  name: string;
-  categoryType: string;
-  slug: string | null;
-  iStatus: string;
-  imageURL: string;
-  remarks?: string;
-  iShowedStatus: string;
-}
+import { Category } from '@/types';
 
 interface CategoryResponse {
   data: Category[];
@@ -44,7 +34,7 @@ export const useCategory = (page: number, limit: number) => {
     },
     staleTime: 60 * 1000, // 60s
     retry: 3,
-    keepPreviousData: true,
+    placeholderData: (previousData) => previousData,
   });
 
   return {

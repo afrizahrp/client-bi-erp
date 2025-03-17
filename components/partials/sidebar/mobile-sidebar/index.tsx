@@ -1,9 +1,11 @@
 'use client';
 import React, { useState } from 'react';
 import { cn, isLocationMatch } from '@/lib/utils';
-import { useSidebar, useThemeStore } from '@/store';
+import { useModuleStore, useSidebar, useThemeStore } from '@/store';
 import SidebarLogo from '../common/logo';
 import { menusConfig } from '@/config/menus';
+import { useGetMenu } from '@/hooks/use-get-menu'; // 🔥 Import hook yang sudah kamu buat
+
 import MenuLabel from '../common/menu-label';
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -25,7 +27,9 @@ const MobileSidebar = ({
   const { sidebarBg, mobileMenu, setMobileMenu } = useSidebar();
   const [activeSubmenu, setActiveSubmenu] = useState<number | null>(null);
   const [activeMultiMenu, setMultiMenu] = useState<number | null>(null);
-  const menus = menusConfig?.sidebarNav?.classic || [];
+  // const menus = menusConfig?.sidebarNav?.classic || [];
+  const { menuItems, loading } = useGetMenu(); // 🔥 Gunakan hook untuk fetch data menu
+
   const { collapsed } = useSidebar();
 
   const { session } = useAuth();
@@ -46,7 +50,11 @@ const MobileSidebar = ({
     logoSrc = '/images/logo/bipmed-logo.png'; // Logo untuk KBIP
   }
 
-  const toggleSubmenu = (i: number) => {
+  const setModuleId = useModuleStore((state) => state.setModuleId);
+
+  const toggleSubmenu = (i: number, module_id: string) => {
+    setModuleId(module_id);
+
     if (activeSubmenu === i) {
       setActiveSubmenu(null);
     } else {
@@ -66,7 +74,7 @@ const MobileSidebar = ({
   React.useEffect(() => {
     let subMenuIndex = null;
     let multiMenuIndex = null;
-    menus?.map((item: any, i: number) => {
+    menuItems?.map((item: any, i: number) => {
       if (item?.child) {
         item.child.map((childItem: any, j: number) => {
           if (isLocationMatch(childItem.href, locationName)) {
@@ -125,7 +133,7 @@ const MobileSidebar = ({
               ' space-y-2 text-center': collapsed,
             })}
           >
-            {menus.map((item, i) => (
+            {menuItems.map((item, i) => (
               <li key={`menu_key_${i}`}>
                 {/* single menu  */}
 

@@ -1,6 +1,8 @@
 'use client';
 
 import axios from 'axios';
+
+import { useUpdateBillboard } from '@/queryHooks/useUpdateBillboard';
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -8,7 +10,6 @@ import FormFooter from '@/components/form-footer';
 import SimpleMDE from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
 import { toast } from 'react-hot-toast';
-
 import { useParams, useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import {
@@ -32,11 +33,13 @@ import {
   billboardFormSchema,
 } from '@/utils/schema/billboard.form.schema';
 import { billboarddefaultValues } from '@/utils/defaultvalues/billboard.defaultValue';
-import { InputGroup, InputGroupText } from '@/components/ui/input-group';
 import { Switch } from '@/components/ui/switch';
+import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
+import { id_ID } from '@faker-js/faker';
 
 interface BillboardFormProps {
-  initialBillboardData: Billboard | null; // Gunakan tipe Billboard
+  initialBillboardData: Billboard | undefined;
 }
 
 export const BillboardForm: React.FC<BillboardFormProps> = ({
@@ -44,61 +47,128 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
 }) => {
   const params = useParams();
   const router = useRouter();
-
   const [loading, setLoading] = useState(false);
-  const [contents, setContents] = useState(
-    initialBillboardData?.contentURL ?? []
-  );
-
-  const id = initialBillboardData?.id;
+  // const [contents, setContents] = useState(
+  //   initialBillboardData.contentURL ?? []
+  // );
 
   const actionMessage = initialBillboardData
     ? 'Billboard has changed successfully.'
     : 'New Billboard has been added successfully.';
 
+  // const form = useForm<BillboardFormValues>({
+  //   resolver: zodResolver(billboardFormSchema),
+  //   defaultValues: billboarddefaultValues({
+  //     id: initialBillboardData?.id ?? 0,
+  //     section: initialBillboardData?.section ?? 0,
+  //     title: initialBillboardData?.title ?? '',
+  //     name: initialBillboardData?.name ?? '',
+  //     isImage: initialBillboardData?.isImage ?? true,
+  //     contentURL: initialBillboardData?.contentURL ?? '',
+  //     content_id: initialBillboardData?.content_id ?? 0,
+  //     iStatus: initialBillboardData?.iStatus ?? 'ACTIVE',
+  //     iShowedStatus: initialBillboardData?.iShowedStatus ?? 'SHOW',
+  //     remarks: initialBillboardData?.remarks ?? '',
+  //     contentType: initialBillboardData?.contentType ?? '',
+  //   }),
+  // });
+
   const form = useForm<BillboardFormValues>({
     resolver: zodResolver(billboardFormSchema),
-    defaultValues: initialBillboardData
-      ? {
-          ...initialBillboardData,
-          title: initialBillboardData.title ?? '',
-          name: initialBillboardData.name ?? '',
-          isImage: initialBillboardData.isImage ?? true,
-          contentURL: initialBillboardData.contentURL ?? '',
-          content_id: initialBillboardData.content_id ?? '',
-          iStatus: initialBillboardData.iStatus ?? '',
-          iShowedStatus: initialBillboardData.iShowedStatus ?? '',
-          remarks: initialBillboardData.remarks ?? '',
-          contentType: initialBillboardData.contentType ?? '',
-        }
-      : {
-          section: 1,
-          title: '',
-          name: '',
-          isImage: true,
-          contentURL: '',
-          content_id: '',
-          iStatus: 'Active',
-          iShowedStatus: 'SHOW',
-          remarks: '',
-          contentType: '',
-        },
+    defaultValues: billboarddefaultValues(initialBillboardData),
   });
+
+  // const form = useForm<BillboardFormValues>({
+  //   resolver: zodResolver(billboardFormSchema),
+  //   defaultValues: billboarddefaultValues(
+  //     initialBillboardData ?? {
+  //       id: 0,
+  //       name: '',
+  //       section: 0,
+  //       title: '',
+  //       isImage: true,
+  //       contentURL: '',
+  //       content_id: 0,
+  //       iShowedStatus: 'SHOW',
+  //       iStatus: 'ACTIVE',
+  //       remarks: '',
+  //       contentType: '',
+  //     }
+  //   ),
+  // });
+
   const handleBack = (e: any) => {
     e.preventDefault();
     setLoading(false);
-    router.push('/cms/billboards/billboard-list');
+    router.push('/cms/billboard/list');
+  };
+
+  // const handleUpdateBillboard = (id: number) => {
+  //   console.log('Form values:', form.getValues()); // Debugging log
+  //   const updatedData = {
+  //     id: id,
+  //     data: {
+  //       ...form.getValues(),
+  //       name: form.getValues().name ?? null,
+  //       title: form.getValues().title ?? null,
+  //       contentURL: form.getValues().contentURL ?? '',
+  //       section: form.getValues().section ?? 0,
+  //       iStatus: form.getValues().iStatus ?? 'ACTIVE',
+  //       iShowedStatus: form.getValues().iShowedStatus ?? 'SHOW',
+  //       remarks: form.getValues().remarks ?? null,
+  //       isImage: form.getValues().isImage ?? true,
+  //       contentType: form.getValues().contentType ?? '',
+  //     },
+  //   };
+  //   updateBillboardMutation.mutate(updatedData);
+  // };
+
+  const id = initialBillboardData?.id ?? 0;
+  const updateBillboardMutation = useUpdateBillboard();
+
+  const handleUpdateBillboard = (id: number) => {
+    console.log('Form values:', form.getValues()); // Debugging log
+    const updatedData = {
+      id: id,
+      data: {
+        ...form.getValues(),
+        name: form.getValues().name ?? '',
+        title: form.getValues().title ?? '',
+        contentURL: form.getValues().contentURL ?? '',
+        section: form.getValues().section ?? 0,
+        iStatus: form.getValues().iStatus ?? 'ACTIVE',
+        iShowedStatus: form.getValues().iShowedStatus ?? 'SHOW',
+        remarks: form.getValues().remarks ?? '',
+        isImage: form.getValues().isImage ?? true,
+        contentType: form.getValues().contentType ?? '',
+      },
+    };
+    console.log('Updated data:', updatedData); // Debugging log
+    updateBillboardMutation.mutate(updatedData, {
+      onSuccess: () => {
+        console.log('Update successful'); // Debugging log
+        toast.success(actionMessage);
+        router.push('/cms/billboard/list');
+        router.refresh();
+      },
+      onError: (error) => {
+        console.error('Update failed:', error); // Debugging log
+        toast.error('Update failed');
+      },
+    });
   };
 
   const onSubmit = async (data: BillboardFormValues) => {
     try {
       setLoading(true);
       if (initialBillboardData) {
-        await axios.patch(`/api/cms/billboards/${params?.id}`, data);
+        console.log('Calling handleUpdateBillboard'); // Debugging log
+        handleUpdateBillboard(data.id);
       } else {
-        await axios.post(`/api/cms/billboards`, data);
+        console.log('Calling axios.post'); // Debugging log
+        // await axios.post(`/api/cms/billboards`, data);
       }
-      router.push('/cms/billboards/billboard-list');
+      router.push('/cms/billboard/list');
       router.refresh();
       toast.success(actionMessage);
     } catch (error: any) {
@@ -140,6 +210,9 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
           onSubmit={form.handleSubmit(onSubmit)}
           className='space-y-8 w-full'
         >
+          {/* <Button type='submit' disabled={loading}>
+            'UpdateX'
+          </Button> */}
           <div className='w-full flex items-center justify-center'>
             <FormField
               control={form.control}
@@ -275,6 +348,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                       disabled={loading}
                       placeholder='Type here to add description'
                       {...field}
+                      value={field.value ?? ''}
                     />
                   </FormControl>
                 </FormItem>
@@ -377,11 +451,20 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
               )}
             />
           </div>
+          <div>
+            <Button
+              className='w-full'
+              type='submit'
+              disabled={loading}
+              onClick={() => handleUpdateBillboard(id)}
+            >
+              Update
+            </Button>
+          </div>
           {/* <FormFooter
-            handleBack={handleBack}
-            loading={loading}
-            form={form}
-            id={id}
+            isLoading={loading}
+            handleAltBtn={handleBack}
+            submitBtnText={id ? 'Update' : 'Save'}
           /> */}
         </form>
       </Form>

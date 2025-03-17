@@ -2,20 +2,7 @@ import { api } from '@/config/axios.config';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/provider/auth.provider';
 import { useModuleStore } from '@/store';
-
-interface Billboard {
-  id: string;
-  section: number;
-  content_id: string;
-  title: string;
-  name: string;
-  isImage: boolean;
-  contentURL: string;
-  contentType: string;
-  iStatus: string;
-  iShowedStatus: string;
-  remarks?: string;
-}
+import { Billboard } from '@/types';
 
 interface BillboardResponse {
   data: Billboard[];
@@ -38,16 +25,15 @@ export const useGetAllBillboard = (page: number, limit: number) => {
       try {
         const response = await api.get<BillboardResponse>(url);
 
-        console.log('Response data:', response.data); // Debugging log
-        return response.data; // Kembalikan data dari respons
+        return response.data;
       } catch (error) {
-        console.error('Error fetching billboard:', error); // Debugging log
-        throw new Error('Failed to fetch billboard'); // Tangani error
+        console.error('Error fetching billboard:', error);
+        throw new Error('Failed to fetch billboard');
       }
     },
     staleTime: 60 * 1000, // 60s
     retry: 3,
-    keepPreviousData: true,
+    placeholderData: (previousData) => previousData,
   });
 
   return {

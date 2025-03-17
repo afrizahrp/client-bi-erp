@@ -38,7 +38,6 @@ export const useGetOneBillboard = (id: string) => {
       try {
         const response = await api.get<Billboard>(url);
 
-        console.log('Response data:', response.data); // Debugging log
         return response.data; // Kembalikan data dari respons
       } catch (error) {
         console.error('Error fetching billboard:', error); // Debugging log
@@ -47,7 +46,7 @@ export const useGetOneBillboard = (id: string) => {
     },
     staleTime: 60 * 1000, // 60s
     retry: 3,
-    keepPreviousData: true,
+    placeholderData: (previousData) => previousData,
   });
 
   return {

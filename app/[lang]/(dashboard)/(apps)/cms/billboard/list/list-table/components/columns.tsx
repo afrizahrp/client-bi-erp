@@ -10,7 +10,7 @@ import NextImage from 'next/image';
 import { Video } from 'cloudinary-react';
 
 export type BillboardColumn = {
-  id: string;
+  id: number;
   section: string;
   description: string;
   title: string;
@@ -44,21 +44,21 @@ export const columns: ColumnDef<BillboardColumn>[] = [
     enableSorting: true,
   },
 
-  {
-    accessorKey: 'section',
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title='Section'
-        className='text-black dark:text-slate-300'
-      />
-    ),
-    cell: ({ row }) => (
-      <div className='flex space-x-1'>{row.getValue('section')}</div>
-    ),
-    enableHiding: false,
-    enableSorting: true,
-  },
+  // {
+  //   accessorKey: 'section',
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader
+  //       column={column}
+  //       title='Section'
+  //       className='text-black dark:text-slate-300'
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <div className='flex space-x-1'>{row.getValue('section')}</div>
+  //   ),
+  //   enableHiding: false,
+  //   enableSorting: true,
+  // },
 
   {
     accessorKey: 'title',
