@@ -10,10 +10,11 @@ export function billboarddefaultValues(
     name: initialBillboardData?.name ?? '',
     isImage: initialBillboardData?.isImage ?? true,
     contentURL: initialBillboardData?.contentURL ?? '',
-    content_id: initialBillboardData?.content_id ?? 0,
+    content_id: initialBillboardData?.content_id ?? '',
     iStatus: initialBillboardData!.iStatus ?? 'ACTIVE',
     iShowedStatus: initialBillboardData!.iShowedStatus ?? 'SHOW',
     remarks: initialBillboardData?.remarks ?? '',
     contentType: initialBillboardData?.contentType ?? '',
+    company_id: initialBillboardData?.company_id ?? '',
   };
 }

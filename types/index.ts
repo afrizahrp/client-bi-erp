@@ -15,12 +15,13 @@ export type Billboard = {
   section: number;
   title: string;
   contentURL: string;
-  content_id: number;
+  content_id: string;
   isImage: boolean;
   contentType: string;
   iStatus: string;
   iShowedStatus: string;
   remarks: string;
+  company_id: string;
 };
 
 export interface Products {

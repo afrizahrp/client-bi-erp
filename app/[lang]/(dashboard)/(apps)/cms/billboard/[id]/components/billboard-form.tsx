@@ -1,13 +1,11 @@
 'use client';
 
 import axios from 'axios';
-
 import { useUpdateBillboard } from '@/queryHooks/useUpdateBillboard';
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import FormFooter from '@/components/form-footer';
-import SimpleMDE from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
 import { toast } from 'react-hot-toast';
 import { useParams, useRouter } from 'next/navigation';
@@ -34,9 +32,15 @@ import {
 } from '@/utils/schema/billboard.form.schema';
 import { billboarddefaultValues } from '@/utils/defaultvalues/billboard.defaultValue';
 import { Switch } from '@/components/ui/switch';
-import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
-import { id_ID } from '@faker-js/faker';
+
+import { useAuth } from '@/provider/auth.provider';
+import dynamic from 'next/dynamic';
+
+import QuillLoader from '@/components/ui/quill-loader';
+const QuillEditor = dynamic(() => import('@/components/ui/quill-editor'), {
+  ssr: false,
+  loading: () => <QuillLoader className='col-span-full h-[143px]' />,
+});
 
 interface BillboardFormProps {
   initialBillboardData: Billboard | undefined;
@@ -45,57 +49,20 @@ interface BillboardFormProps {
 export const BillboardForm: React.FC<BillboardFormProps> = ({
   initialBillboardData,
 }) => {
+  const { session } = useAuth();
   const params = useParams();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  // const [contents, setContents] = useState(
-  //   initialBillboardData.contentURL ?? []
-  // );
+  const company_id = session?.user?.company_id;
 
   const actionMessage = initialBillboardData
     ? 'Billboard has changed successfully.'
     : 'New Billboard has been added successfully.';
 
-  // const form = useForm<BillboardFormValues>({
-  //   resolver: zodResolver(billboardFormSchema),
-  //   defaultValues: billboarddefaultValues({
-  //     id: initialBillboardData?.id ?? 0,
-  //     section: initialBillboardData?.section ?? 0,
-  //     title: initialBillboardData?.title ?? '',
-  //     name: initialBillboardData?.name ?? '',
-  //     isImage: initialBillboardData?.isImage ?? true,
-  //     contentURL: initialBillboardData?.contentURL ?? '',
-  //     content_id: initialBillboardData?.content_id ?? 0,
-  //     iStatus: initialBillboardData?.iStatus ?? 'ACTIVE',
-  //     iShowedStatus: initialBillboardData?.iShowedStatus ?? 'SHOW',
-  //     remarks: initialBillboardData?.remarks ?? '',
-  //     contentType: initialBillboardData?.contentType ?? '',
-  //   }),
-  // });
-
   const form = useForm<BillboardFormValues>({
     resolver: zodResolver(billboardFormSchema),
     defaultValues: billboarddefaultValues(initialBillboardData),
   });
-
-  // const form = useForm<BillboardFormValues>({
-  //   resolver: zodResolver(billboardFormSchema),
-  //   defaultValues: billboarddefaultValues(
-  //     initialBillboardData ?? {
-  //       id: 0,
-  //       name: '',
-  //       section: 0,
-  //       title: '',
-  //       isImage: true,
-  //       contentURL: '',
-  //       content_id: 0,
-  //       iShowedStatus: 'SHOW',
-  //       iStatus: 'ACTIVE',
-  //       remarks: '',
-  //       contentType: '',
-  //     }
-  //   ),
-  // });
 
   const handleBack = (e: any) => {
     e.preventDefault();
@@ -103,31 +70,10 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     router.push('/cms/billboard/list');
   };
 
-  // const handleUpdateBillboard = (id: number) => {
-  //   console.log('Form values:', form.getValues()); // Debugging log
-  //   const updatedData = {
-  //     id: id,
-  //     data: {
-  //       ...form.getValues(),
-  //       name: form.getValues().name ?? null,
-  //       title: form.getValues().title ?? null,
-  //       contentURL: form.getValues().contentURL ?? '',
-  //       section: form.getValues().section ?? 0,
-  //       iStatus: form.getValues().iStatus ?? 'ACTIVE',
-  //       iShowedStatus: form.getValues().iShowedStatus ?? 'SHOW',
-  //       remarks: form.getValues().remarks ?? null,
-  //       isImage: form.getValues().isImage ?? true,
-  //       contentType: form.getValues().contentType ?? '',
-  //     },
-  //   };
-  //   updateBillboardMutation.mutate(updatedData);
-  // };
-
-  const id = initialBillboardData?.id ?? 0;
+  const id = initialBillboardData!.id ?? 0;
   const updateBillboardMutation = useUpdateBillboard();
 
   const handleUpdateBillboard = (id: number) => {
-    console.log('Form values:', form.getValues()); // Debugging log
     const updatedData = {
       id: id,
       data: {
@@ -135,18 +81,18 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
         name: form.getValues().name ?? '',
         title: form.getValues().title ?? '',
         contentURL: form.getValues().contentURL ?? '',
+        content_id: form.getValues().content_id ?? '',
         section: form.getValues().section ?? 0,
         iStatus: form.getValues().iStatus ?? 'ACTIVE',
         iShowedStatus: form.getValues().iShowedStatus ?? 'SHOW',
         remarks: form.getValues().remarks ?? '',
         isImage: form.getValues().isImage ?? true,
         contentType: form.getValues().contentType ?? '',
+        company_id: company_id ?? '',
       },
     };
-    console.log('Updated data:', updatedData); // Debugging log
     updateBillboardMutation.mutate(updatedData, {
       onSuccess: () => {
-        console.log('Update successful'); // Debugging log
         toast.success(actionMessage);
         router.push('/cms/billboard/list');
         router.refresh();
@@ -162,25 +108,21 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     try {
       setLoading(true);
       if (initialBillboardData) {
-        console.log('Calling handleUpdateBillboard'); // Debugging log
-        handleUpdateBillboard(data.id);
+        console.log('Calling handleUpdateBillboard with id:', id);
+        handleUpdateBillboard(id); // Gunakan id dari initialBillboardData
       } else {
-        console.log('Calling axios.post'); // Debugging log
-        // await axios.post(`/api/cms/billboards`, data);
+        console.log('Calling axios.post');
+        // Tambahkan fungsi create Billboard jika perlu
       }
-      router.push('/cms/billboard/list');
-      router.refresh();
-      toast.success(actionMessage);
     } catch (error: any) {
       console.error(error);
-
       toast.error(error.response?.data?.message || 'Save failed');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleImageRemove = async (id: string) => {
+  const handleImageRemove = async (id: number) => {
     try {
       setLoading(true);
 
@@ -210,9 +152,6 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
           onSubmit={form.handleSubmit(onSubmit)}
           className='space-y-8 w-full'
         >
-          {/* <Button type='submit' disabled={loading}>
-            'UpdateX'
-          </Button> */}
           <div className='w-full flex items-center justify-center'>
             <FormField
               control={form.control}
@@ -226,7 +165,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                       onChange={(url) => field.onChange(url)}
                       onRemove={(contentURL) => {
                         if (billboard_id) {
-                          handleImageRemove(billboard_id);
+                          handleImageRemove(id);
                         }
                         const newValue = Array.isArray(field.value)
                           ? field.value.filter(
@@ -342,13 +281,15 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
               name='name'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel className='text-gray-700 dark:text-gray-300'>
+                    Descriptions
+                  </FormLabel>
                   <FormControl>
-                    <SimpleMDE
-                      disabled={loading}
-                      placeholder='Type here to add description'
-                      {...field}
-                      value={field.value ?? ''}
+                    <QuillEditor
+                      value={field.value || ''}
+                      onChange={(value) => field.onChange(value)}
+                      placeholder='Input or edit description here'
+                      className='col-span-full [&_.ql-editor]:min-h-[100px] dark:[&_.ql-editor]:bg-gray-800 dark:[&_.ql-editor]:text-gray-200 dark:[&_.ql-editor]:border-gray-700'
                     />
                   </FormControl>
                 </FormItem>
@@ -452,20 +393,12 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
             />
           </div>
           <div>
-            <Button
-              className='w-full'
-              type='submit'
-              disabled={loading}
-              onClick={() => handleUpdateBillboard(id)}
-            >
-              Update
-            </Button>
+            <FormFooter
+              isLoading={loading}
+              handleAltBtn={handleBack}
+              submitBtnText={id ? 'Update' : 'Save'}
+            />
           </div>
-          {/* <FormFooter
-            isLoading={loading}
-            handleAltBtn={handleBack}
-            submitBtnText={id ? 'Update' : 'Save'}
-          /> */}
         </form>
       </Form>
     </>

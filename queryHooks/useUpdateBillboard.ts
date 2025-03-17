@@ -1,7 +1,6 @@
 import { api } from '@/config/axios.config';
 import { useAuth } from '@/provider/auth.provider';
 import { useModuleStore } from '@/store';
-
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Billboard } from '@/types';
 
@@ -22,8 +21,16 @@ export const useUpdateBillboard = () => {
       try {
         const response = await api.patch(`${url}/${data.id}`, data.data);
         return response.data;
-      } catch (error) {
-        throw new Error('Failed to update billboard');
+      } catch (error: any) {
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message
+        ) {
+          throw new Error(error.response.data.message);
+        } else {
+          throw new Error('Failed to update billboard');
+        }
       }
     },
     onSuccess: () => {

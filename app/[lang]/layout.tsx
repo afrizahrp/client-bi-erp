@@ -8,6 +8,7 @@ import TanstackProvider from '@/provider/providers.client';
 import { AuthProvider } from '@/provider/auth.provider';
 import 'flatpickr/dist/themes/light.css';
 import DirectionProvider from '@/provider/direction.provider';
+import ModalProvider from '@/provider/modal-provider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
@@ -30,7 +31,11 @@ export default function RootLayout({
       <AuthProvider>
         <TanstackProvider>
           <Providers>
-            <DirectionProvider lang={lang}>{children}</DirectionProvider>
+            <DirectionProvider lang={lang}>
+              {/* <ModalProvider /> */}
+
+              {children}
+            </DirectionProvider>
           </Providers>
         </TanstackProvider>
       </AuthProvider>

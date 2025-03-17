@@ -4,55 +4,45 @@ import { useAuth } from '@/provider/auth.provider';
 import { useModuleStore } from '@/store';
 import { Billboard } from '@/types';
 
-// interface Billboard {
-//   id: number;
-//   section: number;
-//   content_id: string;
-//   title: string;
-//   name: string;
-//   isImage: boolean;
-//   contentURL: string;
-//   contentType: string;
-//   iStatus: string;
-//   iShowedStatus: string;
-//   remarks?: string;
-// }
-
-// interface BillboardResponse {
-//   data: Billboard[];
-// }
-
 export const useGetOneBillboard = (id: string) => {
   const { session } = useAuth();
   const company_id = session?.user?.company_id;
   const module_id = useModuleStore((state) => state.moduleId);
 
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/${company_id}/${module_id}/billboards/${id}}`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/${company_id}/${module_id}/billboards/${id}`;
 
   const { data, isLoading, error, isFetching, ...rest } = useQuery<
     Billboard,
     Error
   >({
-    queryKey: ['billboard', company_id, id],
+    queryKey: ['billboard', id],
+    queryFn: async () => {
+      const response = await api.get<Billboard>(url);
+      return response.data;
+    },
+  });
+  ({
+    queryKey: ['billboard', id],
     queryFn: async () => {
       try {
         const response = await api.get<Billboard>(url);
 
-        return response.data; // Kembalikan data dari respons
+        return response.data;
       } catch (error) {
-        console.error('Error fetching billboard:', error); // Debugging log
-        throw new Error('Failed to fetch billboard'); // Tangani error
+        console.error('Error fetching billboard:', error);
+        throw new Error('Failed to fetch billboard');
       }
     },
     staleTime: 60 * 1000, // 60s
     retry: 3,
-    placeholderData: (previousData) => previousData,
+    placeholderData: (previousData: Billboard | undefined) =>
+      previousData ?? undefined,
   });
 
   return {
     data,
     isLoading,
-    isFetching, // Tambahkan untuk menampilkan loading hanya saat fetch baru
+    isFetching,
     error,
     ...rest,
   };
