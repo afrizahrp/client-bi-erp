@@ -6,15 +6,13 @@ export function billboarddefaultValues(
   return {
     id: initialBillboardData?.id ?? 0,
     section: initialBillboardData?.section ?? 0,
-    title: initialBillboardData?.title ?? '',
     name: initialBillboardData?.name ?? '',
-    isImage: initialBillboardData?.isImage ?? true,
+    isImage: initialBillboardData?.isImage,
     contentURL: initialBillboardData?.contentURL ?? '',
     content_id: initialBillboardData?.content_id ?? '',
     iStatus: initialBillboardData!.iStatus ?? 'ACTIVE',
     iShowedStatus: initialBillboardData!.iShowedStatus ?? 'SHOW',
     remarks: initialBillboardData?.remarks ?? '',
-    contentType: initialBillboardData?.contentType ?? '',
     company_id: initialBillboardData?.company_id ?? '',
   };
 }

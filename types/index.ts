@@ -13,11 +13,9 @@ export type Billboard = {
   id: number;
   name: string;
   section: number;
-  title: string;
   contentURL: string;
   content_id: string;
   isImage: boolean;
-  contentType: string;
   iStatus: string;
   iShowedStatus: string;
   remarks: string;

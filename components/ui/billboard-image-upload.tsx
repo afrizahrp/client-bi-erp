@@ -12,6 +12,7 @@ interface BillboardImageUploadProps {
   onChange: (value: string) => void;
   onRemove: (value: string) => void;
   value: string[];
+  className?: string;
 }
 
 const BillboardImageUpload: React.FC<BillboardImageUploadProps> = ({
@@ -19,6 +20,7 @@ const BillboardImageUpload: React.FC<BillboardImageUploadProps> = ({
   onChange,
   onRemove,
   value,
+  className,
 }) => {
   const [isMounted, setIsMounted] = useState(false);
 
@@ -35,45 +37,39 @@ const BillboardImageUpload: React.FC<BillboardImageUploadProps> = ({
   }
 
   return (
-    <div>
-      {/* <div className='mb-4 flex w-[1920px] h-[1080px] items-center gap-4'> */}
-      <div className='mb-2 flex items-center gap-4'>
-        {value.map((url) => (
-          <div key={url} className='relative w-[1200px] h-auto rounded-md'>
-            {/* <div key={url} className='relative w-1920 h-auto rounded-md'> */}
-
-            <div className='z-10 absolute top-2 right-2'>
-              <Button
-                type='button'
-                onClick={() => onRemove(url)}
-                variant='soft'
-                color='destructive'
-                size='sm'
-              >
-                <Trash className='h-4 w-4' />
-              </Button>
-            </div>
-            <Image
-              priority
-              height={100}
-              width={100}
-              layout='responsive'
-              src={url}
-              alt='Image'
-              sizes='(max-width: 140px) 100vw, (max-width: 168px) 50vw, 33vw'
-              style={{ width: '1200px', height: '675px' }}
-              className='w-full h-auto rounded-md'
-            />
+    <div className={className}>
+      {value.map((url) => (
+        <div key={url} className='relative w-full h-auto rounded-md'>
+          <div className='z-10 absolute top-2 right-2'>
+            <Button
+              type='button'
+              onClick={() => onRemove(url)}
+              variant='soft'
+              color='destructive'
+              size='sm'
+            >
+              <Trash className='h-4 w-4' />
+            </Button>
           </div>
-        ))}
-      </div>
+          <Image
+            priority
+            height={300}
+            width={400}
+            layout='responsive'
+            src={url}
+            alt='Image'
+            sizes='(max-width: 140px) 100vw, (max-width: 168px) 50vw, 33vw'
+            className='w-full h-auto rounded-md items-center justify-center'
+          />
+        </div>
+      ))}
       <CldUploadWidget
         onUpload={onUpload}
         options={{
           sources: ['local', 'google_drive'],
           resourceType: 'image',
           multiple: false,
-          clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp', 'gif'], // Specify allowed formats here
+          clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp', 'gif'],
         }}
         uploadPreset='uploadBiwebapp'
       >

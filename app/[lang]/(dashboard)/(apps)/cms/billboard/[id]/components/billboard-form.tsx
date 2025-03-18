@@ -24,7 +24,6 @@ import BillboardVideoUpload from '@/components/ui/billboard-video-upload';
 import BillboardImageUpload from '@/components/ui/billboard-image-upload';
 
 import { Checkbox } from '@/components/ui/checkbox';
-import { Separator } from '@/components/ui/separator';
 import { Billboard } from '@/types';
 import {
   BillboardFormValues,
@@ -79,7 +78,6 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
       data: {
         ...form.getValues(),
         name: form.getValues().name ?? '',
-        title: form.getValues().title ?? '',
         contentURL: form.getValues().contentURL ?? '',
         content_id: form.getValues().content_id ?? '',
         section: form.getValues().section ?? 0,
@@ -87,7 +85,6 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
         iShowedStatus: form.getValues().iShowedStatus ?? 'SHOW',
         remarks: form.getValues().remarks ?? '',
         isImage: form.getValues().isImage ?? true,
-        contentType: form.getValues().contentType ?? '',
         company_id: company_id ?? '',
       },
     };
@@ -140,6 +137,8 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
   };
 
   const isImageValue = form.watch('isImage');
+
+  console.log('form watch isImage:', isImageValue);
   const UploadComponent = isImageValue
     ? BillboardImageUpload
     : BillboardVideoUpload;
@@ -153,37 +152,40 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
           className='space-y-8 w-full'
         >
           <div className='w-full flex items-center justify-center'>
-            <FormField
-              control={form.control}
-              name='contentURL'
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl className='flex flex-col gap-3'>
-                    <UploadComponent
-                      value={field.value ? [field.value] : []}
-                      disabled={loading}
-                      onChange={(url) => field.onChange(url)}
-                      onRemove={(contentURL) => {
-                        if (billboard_id) {
-                          handleImageRemove(id);
-                        }
-                        const newValue = Array.isArray(field.value)
-                          ? field.value.filter(
-                              (value: { contentURL: string }) =>
-                                value.contentURL !== contentURL
-                            )
-                          : [];
-                        field.onChange(newValue);
-                      }}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+            <div className='w-full max-w-md'>
+              <FormField
+                control={form.control}
+                name='contentURL'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl className='flex flex-col items-center gap-2'>
+                      <UploadComponent
+                        value={field.value ? [field.value] : []}
+                        disabled={loading}
+                        onChange={(url) => field.onChange(url)}
+                        onRemove={(contentURL) => {
+                          if (billboard_id) {
+                            handleImageRemove(id);
+                          }
+                          const newValue = Array.isArray(field.value)
+                            ? field.value.filter(
+                                (value: { contentURL: string }) =>
+                                  value.contentURL !== contentURL
+                              )
+                            : [];
+                          field.onChange(newValue);
+                        }}
+                        className='w-full h-64 mb-4' // Atur ukuran di sini
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
-          <Separator />
+          {/* <Separator /> */}
 
-          <div>
+          <div className='mt-0'>
             <FormField
               control={form.control}
               name='isImage'
@@ -206,8 +208,8 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                         <span className='text-green'>
                           Show billboard as Video
                         </span>
-                      )}{' '}
-                    </FormLabel>{' '}
+                      )}
+                    </FormLabel>
                     <FormDescription>
                       {field.value ? (
                         <span className='text-white'>
@@ -252,7 +254,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
             <div className='col-span-8'>
               <FormField
                 control={form.control}
-                name='title'
+                name='name'
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Title</FormLabel>
@@ -264,11 +266,11 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                         disabled={loading}
                       />
                     </FormControl>
-                    {form.formState.errors.title && (
+                    {form.formState.errors.name && (
                       <FormMessage>
-                        {form.formState.errors.title.message}
+                        {form.formState.errors.name.message}
                       </FormMessage>
-                    )}{' '}
+                    )}
                   </FormItem>
                 )}
               />
@@ -278,7 +280,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
           <div>
             <FormField
               control={form.control}
-              name='name'
+              name='remarks'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className='text-gray-700 dark:text-gray-300'>
@@ -324,7 +326,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                       <span className='text-red text-semibold'>Active</span>
                     ) : (
                       <span className='text-green'>Non Active</span>
-                    )}{' '}
+                    )}
                   </FormLabel>
                   <FormDescription>
                     {field.value ? (

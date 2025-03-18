@@ -13,7 +13,6 @@ export type BillboardColumn = {
   id: number;
   section: string;
   description: string;
-  title: string;
   iStatus: string;
   iShowedStatus: string;
   remarks: string;
@@ -60,34 +59,34 @@ export const columns: ColumnDef<BillboardColumn>[] = [
   //   enableSorting: true,
   // },
 
-  {
-    accessorKey: 'title',
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title='Title'
-        className='text-black dark:text-slate-300'
-      />
-    ),
-    cell: ({ row }) => (
-      <div className='w-[100px] dark:text-slate-300'>
-        <Link
-          href={routes.cms.editBillboardCms(row.getValue('id'))}
-          className='text-primary-600 dark:text-slate-200'
-        >
-          {row.getValue('title')}
-        </Link>{' '}
-      </div>
-    ),
-    enableHiding: false,
-  },
+  // {
+  //   accessorKey: 'title',
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader
+  //       column={column}
+  //       title='Title'
+  //       className='text-black dark:text-slate-300'
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <div className='w-[100px] dark:text-slate-300'>
+  //       <Link
+  //         href={routes.cms.editBillboardCms(row.getValue('id'))}
+  //         className='text-primary-600 dark:text-slate-200'
+  //       >
+  //         {row.getValue('title')}
+  //       </Link>{' '}
+  //     </div>
+  //   ),
+  //   enableHiding: false,
+  // },
 
   {
     accessorKey: 'description',
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title='Description'
+        title='Title'
         className='text-black dark:text-slate-300'
       />
     ),
@@ -143,7 +142,6 @@ export const columns: ColumnDef<BillboardColumn>[] = [
           ) : isImage ? (
             <NextImage
               src={row.getValue('contentURL')}
-              objectPosition='center'
               width={200}
               height={170}
               alt='Image'
@@ -157,7 +155,7 @@ export const columns: ColumnDef<BillboardColumn>[] = [
               height='170px'
               controls
               loop
-              className='max-w-[200px] rounded' // And here
+              className='max-w-[180px] rounded' // And here
             />
           )}
         </div>
