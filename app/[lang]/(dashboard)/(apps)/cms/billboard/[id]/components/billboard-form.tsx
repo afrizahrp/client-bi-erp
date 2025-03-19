@@ -73,14 +73,24 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
   const id = initialBillboardData!.id ?? 0;
   const updateBillboardMutation = useUpdateBillboard();
 
+  function extractPublicIdFromCloudinaryUrl(url: string): string {
+    const parts = url.split('/');
+    const filename = parts.pop(); // Ambil bagian terakhir dari URL
+    if (!filename) return ''; // Jika tidak ada, return string kosong
+    return filename.split('.')[0]; // Ambil nama file tanpa ekstensi
+  }
+
   const handleUpdateBillboard = (id: number) => {
+    const contentId = extractPublicIdFromCloudinaryUrl(
+      form.getValues().contentURL as string
+    );
     const updatedData = {
       id: id,
       data: {
         ...form.getValues(),
         name: form.getValues().name ?? '',
         contentURL: form.getValues().contentURL ?? '',
-        content_id: form.getValues().content_id ?? '',
+        content_id: contentId ?? '',
         section: form.getValues().section ?? 0,
         iStatus: form.getValues().iStatus ?? 'ACTIVE',
         iShowedStatus: form.getValues().iShowedStatus ?? 'SHOW',
@@ -96,7 +106,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
         router.refresh();
       },
       onError: (error) => {
-        console.error('Update failed:', error); // Debugging log
+        console.error('Update failed:', error);
         toast.error('Update failed');
       },
     });
@@ -106,11 +116,9 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     try {
       setLoading(true);
       if (initialBillboardData) {
-        console.log('Calling handleUpdateBillboard with id:', id);
-        handleUpdateBillboard(id); // Gunakan id dari initialBillboardData
+        handleUpdateBillboard(id);
       } else {
         console.log('Calling axios.post');
-        // Tambahkan fungsi create Billboard jika perlu
       }
     } catch (error: any) {
       console.error(error);
@@ -158,7 +166,8 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                 name='contentURL'
                 render={({ field }) => (
                   <FormItem>
-                    <FormControl className='flex flex-col items-center gap-2'>
+                    {/* <FormControl className='flex flex-col items-center gap-2'> */}
+                    <FormControl className='w-full'>
                       <UploadComponent
                         value={field.value ? [field.value] : []}
                         disabled={loading}
@@ -175,7 +184,6 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                             : [];
                           field.onChange(newValue);
                         }}
-                        // className='w-full h-64 mb-4' // Atur ukuran di sini
                       />
                     </FormControl>
                   </FormItem>
