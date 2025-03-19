@@ -22,6 +22,7 @@ import {
 
 import BillboardVideoUpload from '@/components/ui/billboard-video-upload';
 import BillboardImageUpload from '@/components/ui/billboard-image-upload';
+import SingleFileUploader from '@/components/ui/singleFileUploader';
 
 import { Checkbox } from '@/components/ui/checkbox';
 import { Billboard } from '@/types';
@@ -138,9 +139,8 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
 
   const isImageValue = form.watch('isImage');
 
-  console.log('form watch isImage:', isImageValue);
   const UploadComponent = isImageValue
-    ? BillboardImageUpload
+    ? SingleFileUploader
     : BillboardVideoUpload;
 
   const billboard_id = initialBillboardData?.id.toString();
@@ -175,7 +175,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                             : [];
                           field.onChange(newValue);
                         }}
-                        className='w-full h-64 mb-4' // Atur ukuran di sini
+                        // className='w-full h-64 mb-4' // Atur ukuran di sini
                       />
                     </FormControl>
                   </FormItem>
