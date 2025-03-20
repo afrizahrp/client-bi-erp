@@ -36,6 +36,8 @@ const SingleFileUploader: React.FC<SingleFileUploaderProps> = ({
   useEffect(() => {
     if (value.length > 0) {
       setUploadedUrl(value[0]);
+    } else {
+      setUploadedUrl(null);
     }
   }, [value]);
 
@@ -126,8 +128,10 @@ const SingleFileUploader: React.FC<SingleFileUploaderProps> = ({
         setUploadedUrl(null);
         setFile(null);
         onRemove(content_id);
-        toast.success('File has been delete successfully');
+        if (!response.ok) throw new Error('Delete failed');
         const result = await response.json();
+        setUploadedUrl(null);
+        onChange('');
         return result;
       } catch (error) {
         console.error('Error deleting file:', error);

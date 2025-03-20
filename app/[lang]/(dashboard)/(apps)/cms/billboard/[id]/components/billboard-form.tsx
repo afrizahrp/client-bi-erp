@@ -1,7 +1,7 @@
 'use client';
 
-import axios from 'axios';
 import { useUpdateBillboard } from '@/queryHooks/useUpdateBillboard';
+import { useCreateBillboard } from '@/queryHooks/useCreateBillboard';
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -21,7 +21,6 @@ import {
 } from '@/components/ui/form';
 
 import BillboardVideoUpload from '@/components/ui/billboard-video-upload';
-import BillboardImageUpload from '@/components/ui/billboard-image-upload';
 import SingleFileUploader from '@/components/ui/singleFileUploader';
 
 import { Checkbox } from '@/components/ui/checkbox';
@@ -41,6 +40,7 @@ const QuillEditor = dynamic(() => import('@/components/ui/quill-editor'), {
   ssr: false,
   loading: () => <QuillLoader className='col-span-full h-[143px]' />,
 });
+// import BillboardImageUpload from '@/components/ui/billboard-image-upload';
 
 interface BillboardFormProps {
   initialBillboardData: Billboard | undefined;
@@ -70,7 +70,8 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     router.push('/cms/billboard/list');
   };
 
-  const id = initialBillboardData!.id ?? 0;
+  const id = initialBillboardData?.id ?? 0;
+  const createBillboardMutation = useCreateBillboard();
   const updateBillboardMutation = useUpdateBillboard();
 
   function extractPublicIdFromCloudinaryUrl(url: string): string {
@@ -79,6 +80,47 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     if (!filename) return ''; // Jika tidak ada, return string kosong
     return filename.split('.')[0]; // Ambil nama file tanpa ekstensi
   }
+
+  console.log('Submitting form:', form.getValues());
+
+  const handleCreateBillboard = () => {
+    console.log('handleCreateBillboard called'); // Log ini untuk memastikan fungsi dipanggil
+
+    const contentId = extractPublicIdFromCloudinaryUrl(
+      form.getValues().contentURL as string
+    );
+    const newData = {
+      ...form.getValues(),
+      id: undefined,
+      name: form.getValues().name ?? '',
+      contentURL: form.getValues().contentURL ?? '',
+      content_id: contentId ?? '',
+      section: form.getValues().section ?? 0,
+      iStatus: form.getValues().iStatus ?? 'ACTIVE',
+      iShowedStatus: form.getValues().iShowedStatus ?? 'SHOW',
+      remarks: form.getValues().remarks ?? '',
+      isImage: form.getValues().isImage ?? true,
+      company_id: company_id ?? '',
+    };
+
+    console.log('New Billboard Data:', newData); // Log untuk melihat data yang dikirimkan
+
+    createBillboardMutation.mutate(
+      { data: newData },
+      {
+        onSuccess: () => {
+          toast.success(actionMessage);
+          // router.push('/cms/billboard/list');
+        },
+        onError: (error: any) => {
+          console.error('Creation failed:', error);
+          const errorMessage =
+            error.response?.data?.message || 'Creation failed';
+          toast.error('Creation failed');
+        },
+      }
+    );
+  };
 
   const handleUpdateBillboard = (id: number) => {
     const contentId = extractPublicIdFromCloudinaryUrl(
@@ -102,7 +144,6 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     updateBillboardMutation.mutate(updatedData, {
       onSuccess: () => {
         toast.success(actionMessage);
-        router.push('/cms/billboard/list');
         router.refresh();
       },
       onError: (error) => {
@@ -112,13 +153,19 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     });
   };
 
+  // console.log('initialBillboardData', initialBillboardData);
+
   const onSubmit = async (data: BillboardFormValues) => {
     try {
       setLoading(true);
+      console.log('onSubmit called with data:', data);
+
       if (initialBillboardData) {
         handleUpdateBillboard(id);
       } else {
-        console.log('Calling axios.post');
+        console.log('Creating new billboard...');
+
+        await handleCreateBillboard();
       }
     } catch (error: any) {
       console.error(error);
@@ -132,10 +179,12 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     try {
       setLoading(true);
 
+      const contentURL = form.getValues().contentURL as string;
+      form.setValue('contentURL', '');
+      form.setValue('content_id', '');
+      handleUpdateBillboard(id);
       router.refresh();
-
       setLoading(false);
-      toast.success('Content has been removed successfully.');
     } catch (error) {
       console.error(error);
       toast.error('Something went wrong');
@@ -149,7 +198,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     ? SingleFileUploader
     : BillboardVideoUpload;
 
-  const billboard_id = initialBillboardData?.id.toString();
+  const billboard_id = initialBillboardData?.id?.toString() ?? '';
   return (
     <>
       <Form {...form}>
@@ -248,7 +297,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                         max={7}
                         placeholder='Input billboard section here'
                         value={field.value ?? 1}
-                        onChange={field.onChange}
+                        onChange={(e) => field.onChange(Number(e.target.value))} // 🔥 Paksa jadi number
                         className='text-right justify-end'
                       />
                     </FormControl>

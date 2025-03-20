@@ -32,54 +32,18 @@ export const columns: ColumnDef<BillboardColumn>[] = [
       />
     ),
     cell: ({ row }) => (
-      <Link
-        href={routes.cms.editBillboardCms(row.getValue('id'))}
-        className='text-primary-600 dark:text-slate-200'
-      >
-        {row.getValue('id')}
-      </Link>
+      <div className='w-[10px] dark:text-slate-300'>
+        <Link
+          href={routes.cms.editBillboardCms(row.getValue('id'))}
+          className='text-primary-600 dark:text-slate-200'
+        >
+          {row.getValue('id')}
+        </Link>
+      </div>
     ),
     enableHiding: false,
     enableSorting: true,
   },
-
-  // {
-  //   accessorKey: 'section',
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader
-  //       column={column}
-  //       title='Section'
-  //       className='text-black dark:text-slate-300'
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <div className='flex space-x-1'>{row.getValue('section')}</div>
-  //   ),
-  //   enableHiding: false,
-  //   enableSorting: true,
-  // },
-
-  // {
-  //   accessorKey: 'title',
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader
-  //       column={column}
-  //       title='Title'
-  //       className='text-black dark:text-slate-300'
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <div className='w-[100px] dark:text-slate-300'>
-  //       <Link
-  //         href={routes.cms.editBillboardCms(row.getValue('id'))}
-  //         className='text-primary-600 dark:text-slate-200'
-  //       >
-  //         {row.getValue('title')}
-  //       </Link>{' '}
-  //     </div>
-  //   ),
-  //   enableHiding: false,
-  // },
 
   {
     accessorKey: 'description',
@@ -90,18 +54,17 @@ export const columns: ColumnDef<BillboardColumn>[] = [
         className='text-black dark:text-slate-300'
       />
     ),
-    cell: ({ row }) => {
-      return (
-        <div className='flex space-x-1'>
-          <span className='max-w-[150px] dark:text-slate-300 truncate font-sm'>
-            {row.getValue('description')}
-          </span>
-        </div>
-      );
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
+    cell: ({ row }) => (
+      <div className='w-[200px] dark:text-slate-300'>
+        <Link
+          href={routes.cms.editBillboardCms(row.getValue('id'))}
+          className='text-primary-600 dark:text-slate-200'
+        >
+          {row.getValue('description')}
+        </Link>{' '}
+      </div>
+    ),
+    enableHiding: false,
   },
 
   {
@@ -142,7 +105,7 @@ export const columns: ColumnDef<BillboardColumn>[] = [
           ) : isImage ? (
             <NextImage
               src={row.getValue('contentURL')}
-              width={200}
+              width={170}
               height={170}
               alt='Image'
               className='max-w-[180px] rounded' // Added rounded corners here
@@ -151,7 +114,7 @@ export const columns: ColumnDef<BillboardColumn>[] = [
             <Video
               cloudName='biwebapp-live'
               publicId={row.getValue('contentURL')}
-              width='200px'
+              width='170px'
               height='170px'
               controls
               loop
@@ -161,6 +124,7 @@ export const columns: ColumnDef<BillboardColumn>[] = [
         </div>
       );
     },
+    enableSorting: false,
   },
 
   {

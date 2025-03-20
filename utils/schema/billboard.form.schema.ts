@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 export const billboardFormSchema = z.object({
-  id: z.coerce.number().min(0),
-  section: z.coerce.number().optional(),
+  id: z.number().min(1).optional(),
+  section: z.number().min(1).optional(),
   name: z.string().or(z.literal('')),
   isImage: z.boolean().optional(),
   contentURL: z.string().or(z.literal('')),

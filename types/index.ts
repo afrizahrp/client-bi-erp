@@ -10,9 +10,9 @@ export type Category = {
 };
 
 export type Billboard = {
-  id: number;
+  id?: number;
   name: string;
-  section: number;
+  section?: number;
   contentURL: string;
   content_id: string;
   isImage: boolean;

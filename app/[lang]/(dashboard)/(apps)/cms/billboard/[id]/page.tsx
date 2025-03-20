@@ -9,8 +9,10 @@ import LayoutLoader from '@/components/layout-loader';
 
 const BillboardPage = ({ params }: { params: { id: string } }) => {
   const { data, isFetching, error } = useGetOneBillboard(params.id);
+  // const { data, isFetching, error } = useGetOneBillboard(isNew ? null : params.id);
+  const isNew = params.id === 'new';
 
-  if (isFetching && !data) {
+  if (isFetching && !data && !isNew) {
     return (
       <div>
         <LayoutLoader />
@@ -18,23 +20,23 @@ const BillboardPage = ({ params }: { params: { id: string } }) => {
     );
   }
 
-  if (error) {
+  if (error && !isNew) {
     return <div>Error fetching billboard: {error.message}</div>;
   }
 
-  if (!data) {
+  if (!data && !isNew) {
     return <div>No data found</div>;
   }
 
   const pageHeader = {
-    title: data ? 'Edit Billboard' : 'New Billboard',
+    title: isNew ? 'Edit Billboard' : 'New Billboard',
     breadcrumb: [
       {
         name: 'List',
         href: routes.cms.billboard,
       },
       {
-        name: data ? 'Edit Billboard' : 'New Billboard',
+        name: isNew ? 'Edit Billboard' : 'New Billboard',
       },
     ],
   };
@@ -44,7 +46,8 @@ const BillboardPage = ({ params }: { params: { id: string } }) => {
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb} />
       <Card className='py-6'>
         <CardContent>
-          <BillboardForm initialBillboardData={data} />
+          {/* <BillboardForm initialBillboardData={data} /> */}
+          <BillboardForm initialBillboardData={isNew ? undefined : data} />
         </CardContent>
       </Card>
     </>
