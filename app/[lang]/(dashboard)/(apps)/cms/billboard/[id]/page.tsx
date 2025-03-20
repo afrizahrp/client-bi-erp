@@ -31,7 +31,7 @@ const BillboardPage = ({ params }: { params: { id: string } }) => {
     breadcrumb: [
       {
         name: 'List',
-        href: routes.cms.billboards,
+        href: routes.cms.billboard,
       },
       {
         name: data ? 'Edit Billboard' : 'New Billboard',

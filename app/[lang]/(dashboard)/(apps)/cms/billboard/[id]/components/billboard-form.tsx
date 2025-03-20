@@ -132,8 +132,6 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     try {
       setLoading(true);
 
-      await axios.delete(`/api/cms/billboards/${id}`);
-
       router.refresh();
 
       setLoading(false);

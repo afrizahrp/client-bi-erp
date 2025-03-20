@@ -55,25 +55,19 @@ const SingleFileUploader: React.FC<SingleFileUploaderProps> = ({
   });
 
   const closeTheFile = () => {
-    if (file) {
-      const content_id = extractPublicIdFromCloudinaryUrl(file);
-      console.log('content_id:', content_id);
-    }
     setFiles([]);
     setUploadedUrl(null);
+    setFile(null);
   };
 
-  function extractPublicIdFromCloudinaryUrl(url: string): string {
-    const parts = url.split('/');
-    const filename = parts.pop(); // Ambil bagian terakhir dari URL
-    if (!filename) return ''; // Jika tidak ada, return string kosong
-    return filename.split('.')[0]; // Ambil nama file tanpa ekstensi
+  function extractPublicIdFromCloudinaryUrl(arg0: { url: string }): string {
+    const { url } = arg0;
+    if (!url) return '';
+    const publicId = url.split('/').pop()?.split('.')[0];
+    return publicId || '';
   }
 
   const handleUpload = async () => {
-    if (files.length === 0) return;
-    toast.success('Choose a file first!');
-
     if (files[0].size > 5 * 1024 * 1024) {
       toast.error('File size exceeds 5MB');
       setFiles([]);
@@ -100,12 +94,11 @@ const SingleFileUploader: React.FC<SingleFileUploaderProps> = ({
 
       const result = await response.json();
       const uploadedUrl = result.urls[0];
-      const content_id = extractPublicIdFromCloudinaryUrl(uploadedUrl);
+      const content_id = extractPublicIdFromCloudinaryUrl({ url: uploadedUrl });
 
       setUploadedUrl(result.urls[0]);
       setFile(content_id);
 
-      // console.log('content_id:', content_id);
       if (result.urls && result.urls.length > 0) {
         setUploadedUrl(result.urls[0]);
         onChange(result.urls[0]);
@@ -129,8 +122,11 @@ const SingleFileUploader: React.FC<SingleFileUploaderProps> = ({
           `${process.env.NEXT_PUBLIC_API_URL}/BIP/CMS/upload/cloudinary/delete?publicId=${content_id}`,
           { method: 'DELETE' }
         );
+        setFiles([]);
+        setUploadedUrl(null);
+        setFile(null);
+        onRemove(content_id);
         toast.success('File has been delete successfully');
-        closeTheFile();
         const result = await response.json();
         return result;
       } catch (error) {
@@ -154,7 +150,9 @@ const SingleFileUploader: React.FC<SingleFileUploaderProps> = ({
             type='button'
             className='absolute top-4 right-4 h-8 w-8 rounded-full bg-red-600 hover:bg-background hover:text-default-900 z-20'
             onClick={() =>
-              handleDelete(extractPublicIdFromCloudinaryUrl(uploadedUrl))
+              handleDelete(
+                extractPublicIdFromCloudinaryUrl({ url: uploadedUrl })
+              )
             }
             disabled={uploading}
           >
